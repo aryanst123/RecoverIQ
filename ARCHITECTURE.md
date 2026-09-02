@@ -95,3 +95,17 @@ RecoverIQ is an **Adaptive Incremental Revenue Recovery Agent** engineered for f
 - 95% Bootstrap Confidence Intervals (percentile method, 1,000+ iterations).
 - Attribution sensitivity analysis across 24h, 72h, and 168h windows.
 - Experiment manifests with SHA-256 configuration checksums.
+
+#### H. LLM Context Extraction Layer (Phase 7)
+- **Zero Execution Privileges**: Information extraction only. Zero gateway handles, zero authority to declare payments recovered or alter financial balances.
+- **Strict Pydantic Schema**: `RecoveryContextExtraction` with `CustomerIntent`, `PaymentConstraint`, `AmbiguityState`, and normalized promised dates relative to message timestamp.
+- **Adversarial Resilience**: Treats customer communication strictly as untrusted data, ignoring prompt injection attempts to mark payments recovered or bypass safety.
+- **Graceful Fallbacks**: Malformed or timed-out LLM calls fall back cleanly to structured-only features without halting the recovery pipeline.
+
+#### I. Razorpay Test-Mode Integration Layer (Phase 8)
+- **Strict Test-Mode Boundary**: Enforces `RAZORPAY_ENVIRONMENT=test` and `rzp_test_*` credentials; fails closed on live keys or ambiguous configs.
+- **Webhook Verifier**: Constant-time HMAC-SHA256 signature verification over raw request body bytes before JSON decoding.
+- **Event Normalizer**: Translates raw webhook payloads into provider-agnostic `NormalizedPaymentEvent`, converting paise to INR.
+- **Bounded Payment Link Adapter**: Generates test-mode payment links using internal residual amounts and deterministic reference IDs (`riq_{case_id}_{seq}`).
+- **Network Ambiguity Handling**: Provider timeouts map to `ExecutionStatus.UNKNOWN`, triggering live reconciliation rather than blind duplicate link creation.
+- **Monotonic Terminal Protection**: Live reconciliation halts execution if Razorpay shows payment already captured.

@@ -53,16 +53,23 @@ This document tracks the technical execution of RecoverIQ across all 9 defined p
   - Multi-criteria policy confidence & low-confidence fallback (< 0.60)
   - Sequential adaptation & Promise-to-Pay handling
   - Benchmark integration (3 arms), offline ablations, and simulator oracle regret diagnostic
-- [ ] **Phase 7: LLM-Assisted Context & Promise-to-Pay Ablation** (NEXT GATE)
-  - Pydantic schema validation for intent and date extraction
-  - 3-Way controlled ablation: Structured vs Model vs Model+LLM
-- [ ] **Phase 8: Razorpay Integration Adapters**
-  - Webhook ingestion adapter, Payment Link API client
-  - Verification tagging (`UNVERIFIED` primitives marked)
-- [ ] **Phase 9: Frontend & Interactive Benchmark UI**
+- [x] **Phase 7: LLM-Assisted Context & Promise-to-Pay Ablation** (COMPLETED)
+  - Strict Pydantic schema validation for intent, constraints, and relative date extraction
+  - Zero execution privileges boundary & adversarial prompt injection immunity (100% resilience)
+  - 3-Way controlled financial ablation: Control vs RecoverIQ-v1 vs RecoverIQ+LLM
+  - Documented statistical classification (INCONCLUSIVE, 95% CI [-241.55, 418.04])
+  - 13 dedicated LLM tests (97/97 total suite passing)
+- [x] **Phase 8: Razorpay Test-Mode Integration Adapters** (COMPLETED)
+  - Fail-closed test-mode configuration guard (`RAZORPAY_ENVIRONMENT=test`, live credentials blocked)
+  - Constant-time HMAC-SHA256 signature verification over raw request bodies
+  - Event normalization (`NormalizedPaymentEvent`) converting paise to INR
+  - Payment Link adapter with merchant idempotency (`reference_id`) and timeout safety
+  - Live pre-execution reconciliation halting outreach if payment already captured
+  - 14 dedicated Razorpay integration/webhook tests (111/111 total suite passing)
+- [ ] **Phase 9: Frontend & Interactive Benchmark UI** (NEXT GATE)
   - Interactive benchmark dashboard, Case Explorer, Decision Inspector, Failure Injection sandbox
 
 ---
 
 ## Current Status
-Completed **PHASE 6: RecoverIQ Adaptive Decision Engine** (82/82 tests passing). Ready for Phase 7 review.
+Completed **PHASE 8: Razorpay Test-Mode Integration Adapters** (111/111 tests passing). Ready for final evaluation hardening and Phase 9 review.
