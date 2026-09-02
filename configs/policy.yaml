@@ -1,0 +1,11 @@
+# Shared Safety and Recovery Policy Configuration
+version: "1.0.0"
+safety:
+  recovery_window_days: 30
+  max_automated_actions: 3
+  minimum_expected_incremental_recovery: 250.0
+  low_confidence_threshold: 0.60
+  attribution_window_hours: 72
+  stop_on_opt_out: true
+  stop_on_terminal_payment: true
+  min_cooldown_hours_between_actions: 12.0

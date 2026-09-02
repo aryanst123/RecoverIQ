@@ -1,0 +1,13 @@
+# EXPERIMENTAL SIMULATION VALUES ONLY
+# These are simulation evaluation parameters, NOT Razorpay internal costs.
+version: "1.0.0"
+action_costs:
+  REMINDER: 2.0
+  PAYMENT_LINK: 3.0
+  PROMISE_TO_PAY: 5.0
+  ESCALATE: 100.0
+  STOP: 0.0
+
+friction_costs:
+  per_previous_automated_action: 5.0
+  cap: 25.0

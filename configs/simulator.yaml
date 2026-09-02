@@ -1,0 +1,55 @@
+# Simulator Configuration
+version: "1.0.0"
+default_seed: 42
+
+population:
+  default_case_count: 1000
+  amount_distribution:
+    min_amount: 100.0
+    max_amount: 15000.0
+    mean_log: 7.5
+    sigma_log: 1.0
+
+segments:
+  STANDARD: 0.60
+  VIP: 0.15
+  NEW: 0.15
+  AT_RISK: 0.10
+
+channel_preference_distribution:
+  WHATSAPP: 0.55
+  SMS: 0.35
+  EMAIL: 0.10
+
+failure_code_distribution:
+  AUTHENTICATION_FAILED: 0.35
+  INSUFFICIENT_FUNDS: 0.30
+  GATEWAY_DOWNTIME: 0.15
+  NETWORK_TIMEOUT: 0.10
+  CARD_EXPIRED: 0.05
+  USER_DROPPED: 0.05
+
+scenarios:
+  S1_HIGH_NATURAL_RECOVERY:
+    description: "High natural recovery propensity across population"
+    base_natural_recovery_boost: 0.35
+    intervention_uplift_multiplier: 1.0
+  S2_LOW_NATURAL_RECOVERY:
+    description: "Low natural recovery, customers need intervention"
+    base_natural_recovery_boost: -0.20
+    intervention_uplift_multiplier: 1.0
+  S3_WEAK_INTERVENTION_EFFECT:
+    description: "Interventions have low causal impact"
+    base_natural_recovery_boost: 0.0
+    intervention_uplift_multiplier: 0.25
+  S4_STRONG_INTERVENTION_EFFECT:
+    description: "High responsiveness to reminders, payment links, and P2P"
+    base_natural_recovery_boost: 0.0
+    intervention_uplift_multiplier: 2.0
+  S5_HIGH_RECOVERY_HETEROGENEITY:
+    description: "Wide variance in customer sensitivity and channel responsiveness"
+    heterogeneity_sigma: 0.45
+  S6_HIGH_EVENT_FAILURE_RATE:
+    description: "High gateway/execution timeout and drop rate"
+    execution_failure_rate: 0.25
+    execution_timeout_rate: 0.15
