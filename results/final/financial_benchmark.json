@@ -1,0 +1,55 @@
+{
+  "CONTROL": {
+    "N": 6667,
+    "Gross_Recovered": 9576461.55,
+    "Action_Cost": 0.0,
+    "Friction_Cost": 0.0,
+    "Total_Net_Recovered": 9576461.55,
+    "Mean_Net_Per_Case": 1436.3974126293685,
+    "Recovery_Rate": 0.5056247187640618,
+    "Intervention_Efficiency": 0.0,
+    "Unnecessary_Intervention_Rate": 0.0,
+    "Safety_Violations": 0,
+    "Action_Distribution": {
+      "STOP": 100.0
+    }
+  },
+  "BASELINE": {
+    "N": 6667,
+    "Gross_Recovered": 16386220.700000022,
+    "Action_Cost": 76231.0,
+    "Friction_Cost": 16145.0,
+    "Total_Net_Recovered": 16293844.70000002,
+    "Mean_Net_Per_Case": 2443.954507274639,
+    "Recovery_Rate": 0.8417579121043948,
+    "Intervention_Efficiency": 177.38612518403073,
+    "Unnecessary_Intervention_Rate": 0.4998327945602497,
+    "Safety_Violations": 0,
+    "Action_Distribution": {
+      "REMINDER": 43.1,
+      "PROMISE_TO_PAY": 20.3,
+      "STOP": 10.4,
+      "PAYMENT_LINK": 21.1,
+      "ESCALATE": 5.1
+    }
+  },
+  "RECOVERIQ": {
+    "N": 6666,
+    "Gross_Recovered": 13443813.419999987,
+    "Action_Cost": 356308.0,
+    "Friction_Cost": 3795.0,
+    "Total_Net_Recovered": 13083710.419999998,
+    "Mean_Net_Per_Case": 1962.7528382838282,
+    "Recovery_Rate": 0.6782178217821783,
+    "Intervention_Efficiency": 37.333244710541116,
+    "Unnecessary_Intervention_Rate": 0.47696476964769646,
+    "Safety_Violations": 0,
+    "Action_Distribution": {
+      "STOP": 31.2,
+      "ESCALATE": 46.6,
+      "PROMISE_TO_PAY": 8.3,
+      "PAYMENT_LINK": 13.3,
+      "REMINDER": 0.5
+    }
+  }
+}

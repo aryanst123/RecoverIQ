@@ -1,0 +1,14 @@
+{
+  "mean_net_structured": 1468.06951,
+  "mean_net_augmented": 1468.06951,
+  "point_estimate": 0.0,
+  "ci_95": [
+    -208.0181750000002,
+    203.98964700000008
+  ],
+  "classification": "INCONCLUSIVE",
+  "decisions_changed": 0,
+  "promises_registered": 149,
+  "opt_outs_honored": 73,
+  "fallback_rate": 0.0
+}

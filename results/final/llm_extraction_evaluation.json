@@ -1,0 +1,12 @@
+{
+  "evaluation_type": "SYNTHETIC_EXTRACTION_EVALUATION",
+  "samples_evaluated": 12,
+  "intent_accuracy": 0.8333,
+  "p2p_detection_accuracy": 1.0,
+  "promised_date_accuracy": 1.0,
+  "constraint_accuracy": 0.75,
+  "adversarial_resilience_rate": 1.0,
+  "fallback_rate": 0.0,
+  "avg_latency_ms": 15.31,
+  "total_tokens_estimated": 2818
+}

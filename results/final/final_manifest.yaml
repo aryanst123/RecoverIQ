@@ -1,0 +1,46 @@
+# RecoverIQ — Final Freeze Manifest (Phase 9)
+# Timestamp: 2026-09-02T21:23:00Z
+# Status: FROZEN FOR FINAL HOLDOUT BENCHMARK
+
+manifest_version: "1.0.0"
+benchmark_name: "recoveriq_final_frozen_holdout_20k"
+timestamp: "2026-09-02T21:23:00Z"
+runtime:
+  python_version: "3.11.9"
+  platform: "win32"
+  git_commit: "bc885dc3b08e59ea24d262143003058b73f8d388"
+
+benchmark_contract:
+  dataset_size: 20000
+  random_seed: 999888777
+  scenario: "S1_HIGH_NATURAL_RECOVERY"
+  attribution_window_hours: 72
+  bootstrap_iterations: 2000
+  bootstrap_seed: 1337
+  confidence_level: 0.95
+
+component_versions:
+  simulator_version: "1.0.0"
+  baseline_policy_version: "baseline-v1"
+  model_version: "incremental-model-v1"
+  recoveriq_policy_version: "recoveriq-v1"
+  llm_extractor_version: "llm-extract-v1"
+  llm_prompt_version: "p2p-prompt-v1"
+  llm_policy_version: "recoveriq-llm-v1"
+  razorpay_adapter_version: "razorpay-test-v1"
+
+checksums:
+  configs:
+    final_holdout_yaml: "11d46490b036c93cf8434c87a646e46558cfd1ba92e7c63fc13020d4e5878d37"
+    experiment_contract_yaml: "13ec266eda95268669c69da773526a135de691705fe5371f9fd32793f258debf"
+    costs_yaml: "c4f210aa66d56c6ae68d2ebda7bc9731a21a555874d4fb678c9926243a2c05fc"
+    evaluation_yaml: "09371cbb6a634136b77b3cefd8410e1a9ecfceded4b5cde0a14a94be9ca3ac04"
+    policy_yaml: "b9ce2d9f43508218cb73f64529f32117fdb13535a45d1d17e5a443266ebeaf1b"
+    simulator_yaml: "b4b1647b1e1b1cf38f7b08d3f5ee11aadc9b2f1c6e2890cadc2b877c34dc931e"
+    model_yaml: "3967d008aaeb77c4cf3e7019ccdf69fc789709f8938650351a990648a430ca21"
+    training_yaml: "8c6a6b22675c9b6c001e2d6fd8e6aa4754fed817c32745f372b3ac39e8bb706b"
+  policies:
+    baseline_v1_checksum: "b2b1fab7f9638e35c06952ab6a8fa3690d386b7a392d9ed4c4fa6234d0aa1754"
+  model_artifacts:
+    models_pkl: "a83423f1e96ca452a6f1c2e7aaa2cbad486ce0276592f9cdbabbbc7dcabc4470"
+    metadata_json: "345cca1d27144cc4b9c7d534cab0f431b0e8547c65180636da17eac59cd1834f"

@@ -1,0 +1,20 @@
+{
+  "24h": {
+    "mean_net_base": 1312.8414333333333,
+    "mean_net_riq": 1188.37722,
+    "delta_riq_minus_base": -124.46421333333319,
+    "conclusion": "FAVORS_BASELINE"
+  },
+  "72h": {
+    "mean_net_base": 1542.9138933333331,
+    "mean_net_riq": 1483.81314,
+    "delta_riq_minus_base": -59.10075333333316,
+    "conclusion": "FAVORS_BASELINE"
+  },
+  "168h": {
+    "mean_net_base": 1488.0066466666665,
+    "mean_net_riq": 1483.81314,
+    "delta_riq_minus_base": -4.193506666666508,
+    "conclusion": "INCONCLUSIVE"
+  }
+}

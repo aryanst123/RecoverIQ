@@ -1,0 +1,26 @@
+{
+  "RecoverIQ_vs_Baseline": {
+    "point_estimate": -481.2016689908073,
+    "ci_95": [
+      -577.1015855350682,
+      -383.8728954024397
+    ],
+    "classification": "STATISTICALLY_SIGNIFICANT_NEGATIVE"
+  },
+  "RecoverIQ_vs_Control": {
+    "point_estimate": 526.3554256544601,
+    "ci_95": [
+      437.0875628361193,
+      616.1647020893894
+    ],
+    "classification": "STATISTICALLY_SIGNIFICANT_POSITIVE"
+  },
+  "Baseline_vs_Control": {
+    "point_estimate": 1007.5570946452674,
+    "ci_95": [
+      913.3610220488979,
+      1103.7490840707965
+    ],
+    "classification": "STATISTICALLY_SIGNIFICANT_POSITIVE"
+  }
+}
