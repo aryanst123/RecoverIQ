@@ -1,20 +1,21 @@
 {
   "diagnostic_type": "SIMULATOR-ONLY ORACLE DIAGNOSTIC",
   "cohort_size": 1500,
-  "oracle_agreement_rate": 1.0,
-  "mean_regret_per_case": 0.0,
+  "oracle_agreement_rate": 0.238,
+  "mean_regret_per_case": 702.45908,
   "policy_action_distribution": {
-    "STOP": 1.0,
-    "REMINDER": 0.0,
-    "PAYMENT_LINK": 0.0,
-    "PROMISE_TO_PAY": 0.0,
-    "ESCALATE": 0.0
+    "STOP": 0.2993,
+    "REMINDER": 0.006,
+    "PAYMENT_LINK": 0.086,
+    "PROMISE_TO_PAY": 0.0853,
+    "ESCALATE": 0.5233
   },
   "oracle_action_distribution": {
-    "STOP": 1.0,
-    "REMINDER": 0.0,
-    "PAYMENT_LINK": 0.0,
-    "PROMISE_TO_PAY": 0.0,
-    "ESCALATE": 0.0
-  }
+    "STOP": 0.6007,
+    "REMINDER": 0.216,
+    "PAYMENT_LINK": 0.0967,
+    "PROMISE_TO_PAY": 0.0527,
+    "ESCALATE": 0.034
+  },
+  "audit_trail_invalidation_note": "Previous report of 100% agreement and 0.0 regret was invalidated during forensic audit: prior benchmark execution had mutated in-memory case states to terminal, leaving only STOP eligible. Re-evaluated on a fresh unmutated holdout slice under identical seed 999888777."
 }
