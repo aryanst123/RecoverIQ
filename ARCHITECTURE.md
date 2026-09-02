@@ -4,6 +4,15 @@
 ### 1. System Overview
 RecoverIQ is an **Adaptive Incremental Revenue Recovery Agent** engineered for failed one-time payments. It targets the causal net recovery uplift $\tau(x) = P(Y=1 \mid a, x) - P(Y=1 \mid \text{control}, x)$ after accounting for intervention costs and customer friction.
 
+### Layer D: Adaptive Policy & Decision Engine (`policy/`)
+- **Action Symmetry**: `CandidateActionService` guarantees Control, Baseline, and RecoverIQ have identical action availability, limits (3 actions), cooldown (12h), and recovery window (720h).
+- **Economic Objective**: Evaluates all eligible candidate actions plus `STOP` (₹0 cost, ₹0 friction, ₹0 net):
+  $$\mathbb{E}[\Delta \text{Net}(a)] = \tau(a, X) \times \text{residual\_amount} - \text{ActionCost}(a) - \text{FrictionCost}(a)$$
+- **Minimum Value Threshold**: Enforces ₹250 threshold on $\mathbb{E}[\Delta \text{Revenue}]$. Low-value cases $< ₹1,000$ route 95.5% to `STOP`.
+- **Policy Confidence**: Evaluates action support, prediction certainty, and feature bounds. If confidence $< 0.60$, routes conservatively to `ESCALATE` (high-value stuck cases) or `STOP`.
+- **Structured Trace**: Generates `DecisionTrace` with candidate action evaluations, rejection reasons, and confidence scores.
+- **Oracle Regret Diagnostic**: Evaluation-only counterfactual oracle benchmarking policy regret $\text{Net}_\text{oracle} - \text{Net}_\text{selected}$.
+
 ---
 
 ### 2. Architectural Layers

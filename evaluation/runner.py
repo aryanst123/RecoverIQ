@@ -19,6 +19,8 @@ from simulator.scenarios import get_scenario
 from baseline.policy import DeterministicBaselinePolicy
 from baseline.config import load_baseline_config
 from policy.eligibility import CandidateActionService
+from policy.adaptive import RecoverIQAdaptivePolicy
+from models.artifacts import ModelArtifactManager
 from evaluation.policies import ControlPolicy, PlaceholderRecoverIQPolicy
 from evaluation.metrics import (
     CaseEvaluationResult,
@@ -97,7 +99,16 @@ class ExperimentRunner:
         # 4. Initialize Policies
         control_policy = ControlPolicy(self.eligibility_service)
         baseline_policy = DeterministicBaselinePolicy(load_baseline_config())
-        recoveriq_policy = PlaceholderRecoverIQPolicy(self.eligibility_service)
+        try:
+            trained_model = ModelArtifactManager().load_model("incremental-model-v1")
+            recoveriq_policy = RecoverIQAdaptivePolicy(
+                model=trained_model,
+                eligibility_service=self.eligibility_service,
+                minimum_incremental_recovery=250.0,
+                low_confidence_threshold=0.60,
+            )
+        except Exception:
+            recoveriq_policy = PlaceholderRecoverIQPolicy(self.eligibility_service)
 
         case_results: List[CaseEvaluationResult] = []
         recovery_times_relative: Dict[str, Optional[float]] = {}
@@ -181,19 +192,71 @@ class ExperimentRunner:
                 net_rec = gross_rec - act_cost - fric_cost
 
             else:
-                # ARM C: Placeholder RecoverIQ Policy
-                obs_state = env.get_observable_state(case_id, current_time)
-                decision = recoveriq_policy.evaluate(obs_state, current_time)
-                actions_taken.append(decision.selected_action.value)
+                # ARM C: RecoverIQ Policy (Adaptive Decision Engine)
+                if isinstance(recoveriq_policy, RecoverIQAdaptivePolicy):
+                    sim_step = 0
+                    max_steps = 5
 
-                # Control-equivalent placeholder outcome for Phase 3
-                window_end = case.created_at + timedelta(hours=self.attribution_window_hours)
-                env.check_natural_recovery_for_control(case_id, as_of_time=window_end)
-                outcome = env.get_outcome(case_id)
-                gross_rec = outcome.recovered_amount
-                net_rec = gross_rec
-                act_cost = 0.0
-                fric_cost = 0.0
+                    while sim_step < max_steps:
+                        obs_state = env.get_observable_state(case_id, current_time)
+                        if obs_state.is_terminal:
+                            break
+
+                        decision = recoveriq_policy.evaluate_case(obs_state, current_time)
+                        sel_action = decision.selected_action
+
+                        if sel_action == ActionType.STOP:
+                            actions_taken.append(ActionType.STOP.value)
+                            window_end = case.created_at + timedelta(hours=self.attribution_window_hours)
+                            env.check_natural_recovery_for_control(case_id, as_of_time=window_end)
+                            break
+
+                        # Safety violation checks BEFORE execution
+                        if obs_state.customer_opt_out:
+                            safety_violations.append("ACTION_AFTER_OPTOUT")
+                        if obs_state.payment_status == PaymentStatus.CAPTURED:
+                            safety_violations.append("ACTION_AFTER_PAYMENT_CAPTURED")
+                        if obs_state.automated_action_count >= self.max_automated_actions:
+                            safety_violations.append("ACTION_LIMIT_EXCEEDED")
+                        if obs_state.hours_since_failure > self.recovery_window_hours:
+                            safety_violations.append("RECOVERY_WINDOW_EXCEEDED")
+
+                        # Execute Action in simulator
+                        idem_key = f"idem_{experiment_id}_{case_id}_{sim_step}"
+                        exec_rec, updated_case = env.execute_action(
+                            case_id=case_id,
+                            action_type=sel_action,
+                            timestamp=current_time,
+                            policy_version=recoveriq_policy.POLICY_VERSION,
+                            idempotency_key=idem_key,
+                        )
+                        actions_taken.append(sel_action.value)
+                        if updated_case.current_state in [CaseState.RECOVERED, CaseState.STOPPED, CaseState.MANUAL_REVIEW_REQUIRED]:
+                            break
+
+                        # Advance simulated time past cooldown for next potential intervention
+                        current_time += timedelta(hours=self.min_cooldown_hours + 2.0)
+                        sim_step += 1
+
+                    outcome = env.get_outcome(case_id)
+                    gross_rec = outcome.recovered_amount
+
+                    case_actions = env._actions.get(case_id, [])
+                    act_cost = sum(a.cost for a in case_actions)
+                    fric_cost = sum(a.friction_cost for a in case_actions)
+                    net_rec = gross_rec - act_cost - fric_cost
+                else:
+                    # Control-equivalent placeholder outcome for Phase 3
+                    obs_state = env.get_observable_state(case_id, current_time)
+                    decision = recoveriq_policy.evaluate(obs_state, current_time)
+                    actions_taken.append(decision.selected_action.value)
+                    window_end = case.created_at + timedelta(hours=self.attribution_window_hours)
+                    env.check_natural_recovery_for_control(case_id, as_of_time=window_end)
+                    outcome = env.get_outcome(case_id)
+                    gross_rec = outcome.recovered_amount
+                    net_rec = gross_rec
+                    act_cost = 0.0
+                    fric_cost = 0.0
 
             # Attribution classification
             final_case = env._cases[case_id]
@@ -290,7 +353,7 @@ class ExperimentRunner:
             scenario_id=self.scenario_id,
             baseline_version=baseline_policy.version,
             baseline_checksum=baseline_policy.checksum,
-            recoveriq_version=recoveriq_policy.version,
+            recoveriq_version=getattr(recoveriq_policy, "POLICY_VERSION", getattr(recoveriq_policy, "version", "recoveriq-v1")),
             attribution_window_hours=self.attribution_window_hours,
         )
 

@@ -47,11 +47,13 @@ This document tracks the technical execution of RecoverIQ across all 9 defined p
   - Model explanation service extracting logistic regression drivers
   - Offline simulator-only counterfactual ground truth diagnostic
   - 14 dedicated ML/feature tests (68/68 total suite passing)
-- [ ] **Phase 6: RecoverIQ Adaptive Decision Engine** (NEXT GATE)
-  - Economic net recovery objective function
-  - Low-confidence fallback (< 0.60 -> ESCALATE/STOP)
-  - Sequential case re-evaluation
-- [ ] **Phase 7: LLM-Assisted Context & Promise-to-Pay Ablation**
+- [x] **Phase 6: RecoverIQ Adaptive Decision Engine** (COMPLETED)
+  - Economic net recovery objective: $\mathbb{E}[\text{Net}] = \tau(a, X) \cdot \text{Amount} - \text{Cost} - \text{Friction}$
+  - Minimum incremental revenue threshold (₹250)
+  - Multi-criteria policy confidence & low-confidence fallback (< 0.60)
+  - Sequential adaptation & Promise-to-Pay handling
+  - Benchmark integration (3 arms), offline ablations, and simulator oracle regret diagnostic
+- [ ] **Phase 7: LLM-Assisted Context & Promise-to-Pay Ablation** (NEXT GATE)
   - Pydantic schema validation for intent and date extraction
   - 3-Way controlled ablation: Structured vs Model vs Model+LLM
 - [ ] **Phase 8: Razorpay Integration Adapters**
@@ -63,4 +65,4 @@ This document tracks the technical execution of RecoverIQ across all 9 defined p
 ---
 
 ## Current Status
-Executing **PHASE 1: Simulator & Domain Models**.
+Completed **PHASE 6: RecoverIQ Adaptive Decision Engine** (82/82 tests passing). Ready for Phase 7 review.
