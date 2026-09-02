@@ -11,10 +11,13 @@ This document tracks the technical execution of RecoverIQ across all 9 defined p
   - Observable state barrier (zero leakage verified)
   - 6 Stress Scenarios (S1-S6)
   - Comprehensive unit, scenario, and leakage test suite (15/15 passing)
-- [ ] **Phase 2: Deterministic Baseline** (NEXT GATE)
-  - Symmetric rule-based policy with identical action access
-  - Stopping rules, budget, action counts
-  - Audit logging
+- [x] **Phase 2: Deterministic Baseline** (COMPLETED)
+  - Symmetric rule-based policy with identical action access (including P2P)
+  - Stopping rules (opt-out, terminal, cooldown, max actions, recovery window)
+  - Deterministic explanations without LLM
+  - Policy version (`baseline-v1`) and SHA-256 config checksum
+  - 14/14 dedicated baseline unit tests (29/29 total suite passing)
+- [ ] **Phase 3: Evaluation Harness** (NEXT GATE)
 - [ ] **Phase 3: Evaluation Harness**
   - Randomized 3-arm cohort assignment
   - 95% Bootstrap Confidence Intervals
