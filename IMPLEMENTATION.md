@@ -26,12 +26,18 @@ This document tracks the technical execution of RecoverIQ across all 9 defined p
   - Experiment manifest with SHA-256 config checksums
   - 20,000-case frozen holdout configuration (configs/final_holdout.yaml)
   - 8/8 dedicated evaluation unit tests (37/37 total suite passing)
-- [ ] **Phase 4: Safety & Bounded Execution** (NEXT GATE)
-  - Case locks, action reservations, idempotency keys
-  - Webhook HMAC-SHA256 validation & deduplication
-  - Out-of-order & ambiguous execution handling (`EXECUTION_UNKNOWN`)
-  - Adversarial failure injection
-- [ ] **Phase 5: Incremental Recovery Model**
+- [x] **Phase 4: Safety & Bounded Execution** (COMPLETED)
+  - Per-case locking (CaseLockManager) & race condition protection
+  - Atomic action reservation (ActionReservationService -> ACTION_RESERVED)
+  - Merchant-side idempotency tracking (MerchantIdempotencyService)
+  - Ambiguous execution timeout handling (EXECUTION_UNKNOWN -> MANUAL_REVIEW_REQUIRED)
+  - Live pre- and post-execution state reconciliation (LiveStateReconciliationService)
+  - Webhook HMAC-SHA256 signature verification & event ID deduplication
+  - Out-of-order event protection preventing regression of CAPTURED state
+  - The 10 machine-checkable Safety Invariants & structured audit trail
+  - Deterministic failure injection suite (F1 to F13)
+  - 17 dedicated safety/execution/webhook tests (54/54 total suite passing)
+- [ ] **Phase 5: Incremental Recovery Model** (NEXT GATE)
   - Feature extraction pipeline on observable context
   - T-Learner / Calibrated binary classifiers
   - Calibration assessment (Brier score, ECE)
