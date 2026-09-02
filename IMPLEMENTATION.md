@@ -37,11 +37,17 @@ This document tracks the technical execution of RecoverIQ across all 9 defined p
   - The 10 machine-checkable Safety Invariants & structured audit trail
   - Deterministic failure injection suite (F1 to F13)
   - 17 dedicated safety/execution/webhook tests (54/54 total suite passing)
-- [ ] **Phase 5: Incremental Recovery Model** (NEXT GATE)
-  - Feature extraction pipeline on observable context
-  - T-Learner / Calibrated binary classifiers
-  - Calibration assessment (Brier score, ECE)
-- [ ] **Phase 6: RecoverIQ Adaptive Decision Engine**
+- [x] **Phase 5: Incremental Recovery Model** (COMPLETED)
+  - Feature extraction pipeline on observable context (FeaturePipeline)
+  - T-Learner calibrated binary classifiers across all actions (TLearnerTrainer)
+  - Strict leakage barrier & identifier exclusion
+  - Probability calibration (Brier score & Log Loss evaluation)
+  - Preservation of negative uplift effects $\tau(a, x) < 0$
+  - Expected incremental revenue estimation ($\tau(a, x) \times \text{residual\_amount}$)
+  - Model explanation service extracting logistic regression drivers
+  - Offline simulator-only counterfactual ground truth diagnostic
+  - 14 dedicated ML/feature tests (68/68 total suite passing)
+- [ ] **Phase 6: RecoverIQ Adaptive Decision Engine** (NEXT GATE)
   - Economic net recovery objective function
   - Low-confidence fallback (< 0.60 -> ESCALATE/STOP)
   - Sequential case re-evaluation

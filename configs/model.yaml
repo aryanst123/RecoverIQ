@@ -1,0 +1,48 @@
+# Model Configuration for Incremental Recovery Model
+version: "incremental-model-v1"
+model_type: "t_learner_logistic_regression"
+random_seed: 42
+
+features:
+  schema_version: "features-v1"
+  numeric_features:
+    - "amount_due"
+    - "residual_amount"
+    - "hours_since_failure"
+    - "attempt_count"
+    - "automated_action_count"
+    - "last_action_hours_ago"
+  categorical_features:
+    failure_code:
+      - "AUTHENTICATION_FAILED"
+      - "INSUFFICIENT_FUNDS"
+      - "GATEWAY_DOWNTIME"
+      - "NETWORK_TIMEOUT"
+      - "CARD_EXPIRED"
+      - "USER_DROPPED"
+    customer_segment:
+      - "STANDARD"
+      - "VIP"
+      - "NEW"
+      - "AT_RISK"
+    channel_preference:
+      - "WHATSAPP"
+      - "SMS"
+      - "EMAIL"
+    last_action_type:
+      - "NONE"
+      - "REMINDER"
+      - "PAYMENT_LINK"
+      - "PROMISE_TO_PAY"
+      - "ESCALATE"
+    active_promise_status:
+      - "NONE"
+      - "PROMISE_PROPOSED"
+      - "PROMISE_ACCEPTED"
+      - "PROMISE_DUE"
+
+hyperparameters:
+  max_iter: 1000
+  solver: "lbfgs"
+  C: 1.0
+  class_weight: "balanced"

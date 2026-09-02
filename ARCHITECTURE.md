@@ -55,9 +55,13 @@ RecoverIQ is an **Adaptive Incremental Revenue Recovery Agent** engineered for f
 - Strict barrier object: `ObservableCaseState`.
 - Guaranteed zero access to simulation ground truth or hidden potential outcomes.
 
-#### C. Economic & Modeling Layer
-- Calibrated probability estimators evaluating expected incremental recovery:
-  $$\mathbb{E}[\text{Net}] = \text{Amount} \times \Delta P(Y=1 \mid a, x) - \text{Cost}(a) - \text{FrictionCost}$$
+#### C. Economic & Modeling Layer (Phase 5)
+- **Observable Feature Pipeline**: Extracts 28 numeric and one-hot categorical features strictly available before decision time (`FeaturePipeline`). Zero leakage of future events or hidden variables.
+- **T-Learner Architecture**: Dedicated calibrated binary classifiers for each candidate action:
+  $$P(Y=1 \mid A=\text{control}, X), \quad P(Y=1 \mid A=a, X)$$
+- **Incremental Causal Uplift**: Evaluates $\tau(a, x) = P(Y=1 \mid a, X) - P(Y=1 \mid \text{control}, X)$ preserving negative values to capture customer fatigue.
+- **Expected Incremental Revenue**: $\mathbb{E}[\Delta \text{Revenue}] = \tau(a, x) \times \text{residual\_amount}$.
+- **Calibration & Diagnostics**: Evaluates Brier score and Log Loss on holdout validation splits; includes offline `SimulatorGroundTruthDiagnostic` strictly separated from training.
 
 #### D. Policy Engine Layer
 - Evaluates candidate actions filtered through `CandidateActionService`.
