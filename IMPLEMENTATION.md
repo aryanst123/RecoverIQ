@@ -17,13 +17,16 @@ This document tracks the technical execution of RecoverIQ across all 9 defined p
   - Deterministic explanations without LLM
   - Policy version (`baseline-v1`) and SHA-256 config checksum
   - 14/14 dedicated baseline unit tests (29/29 total suite passing)
-- [ ] **Phase 3: Evaluation Harness** (NEXT GATE)
-- [ ] **Phase 3: Evaluation Harness**
-  - Randomized 3-arm cohort assignment
-  - 95% Bootstrap Confidence Intervals
-  - 20,000-case frozen holdout
-  - Multi-window attribution (24h, 72h, 168h)
-- [ ] **Phase 4: Safety & Bounded Execution**
+- [x] **Phase 3: Evaluation Harness** (COMPLETED)
+  - Randomized 3-arm cohort assignment (Control, Baseline, RecoverIQ)
+  - Primary metric: Incremental Net Revenue Recovered (Delta Net)
+  - 95% Bootstrap Confidence Intervals (deterministic seed, 1000 iterations)
+  - 4 Secondary Metrics: Recovery Rate, Intervention Efficiency, Unnecessary Intervention Rate, Critical Safety Violations
+  - Attribution sensitivity across 24h, 72h, and 168h windows
+  - Experiment manifest with SHA-256 config checksums
+  - 20,000-case frozen holdout configuration (configs/final_holdout.yaml)
+  - 8/8 dedicated evaluation unit tests (37/37 total suite passing)
+- [ ] **Phase 4: Safety & Bounded Execution** (NEXT GATE)
   - Case locks, action reservations, idempotency keys
   - Webhook HMAC-SHA256 validation & deduplication
   - Out-of-order & ambiguous execution handling (`EXECUTION_UNKNOWN`)

@@ -1,0 +1,55 @@
+# RecoverIQ Evaluation Contract — Machine-Readable Fairness & Symmetry Definition
+version: "1.0.0"
+contract_id: "eval-contract-2026"
+
+shared_constraints:
+  recovery_window_days: 30
+  recovery_window_hours: 720.0
+  max_automated_actions: 3
+  min_cooldown_hours: 12.0
+  candidate_actions:
+    - REMINDER
+    - PAYMENT_LINK
+    - PROMISE_TO_PAY
+    - ESCALATE
+    - STOP
+
+costs:
+  action_costs:
+    REMINDER: 2.0
+    PAYMENT_LINK: 3.0
+    PROMISE_TO_PAY: 5.0
+    ESCALATE: 100.0
+    STOP: 0.0
+  friction_costs:
+    per_previous_automated_action: 5.0
+    cap: 25.0
+
+attribution:
+  primary_window_hours: 72
+  sensitivity_windows_hours:
+    - 24
+    - 72
+    - 168
+
+randomization:
+  method: "simple_deterministic_modulo"
+  arms:
+    - "CONTROL"
+    - "DETERMINISTIC_BASELINE"
+    - "RECOVERIQ"
+  allocation_ratio: [1, 1, 1]
+
+statistical_inference:
+  confidence_level: 0.95
+  bootstrap_iterations: 1000
+  claim_rules:
+    positive: "lower_bound_95_ci > 0 AND critical_safety_violations == 0"
+    negative: "upper_bound_95_ci < 0"
+    inconclusive: "otherwise"
+
+secondary_metrics:
+  - "recovery_rate"
+  - "intervention_efficiency"
+  - "unnecessary_intervention_rate"
+  - "critical_safety_violations"
