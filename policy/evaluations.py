@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional
 from domain.enums import ActionType
 
-@dataclass
+@dataclass(frozen=True)
 class ActionEvaluation:
     action: ActionType
     probability: float
@@ -22,7 +22,7 @@ class ActionEvaluation:
         d["action"] = self.action.value
         return d
 
-@dataclass
+@dataclass(frozen=True)
 class DecisionTrace:
     case_id: str
     model_version: str

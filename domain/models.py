@@ -85,6 +85,8 @@ class RecoveryEvent(DomainBaseModel):
     payload: Dict[str, Any] = Field(default_factory=dict)
 
 class PolicyDecision(DomainBaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
     decision_id: str
     case_id: str
     candidate_actions: List[ActionType]

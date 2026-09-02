@@ -71,13 +71,15 @@ class OracleCounterfactualDiagnostic:
 
         for cust, pay, att, case, hidden in cases_cohort:
             obs_state = env.get_observable_state(case.case_id, current_time=att.attempted_at)
+            eligible_actions = self.policy.eligibility_service.get_eligible_actions(obs_state)
+            
             decision = self.policy.evaluate_case(obs_state, decision_time=att.attempted_at)
             selected_action = decision.selected_action
             action_counts[selected_action.value] += 1
 
-            # Compute true counterfactual net for all actions
+            # Compute true counterfactual net for all eligible actions
             true_nets = {}
-            for act in candidate_actions:
+            for act in eligible_actions:
                 true_nets[act] = self.calculate_counterfactual_net(
                     action=act,
                     hidden=hidden,
@@ -85,10 +87,14 @@ class OracleCounterfactualDiagnostic:
                     action_count=case.automated_action_count,
                 )
 
-            # Oracle selects the action with the maximum true net recovery
-            best_action = max(candidate_actions, key=lambda a: true_nets[a])
+            # Oracle selects the eligible action with the maximum true net recovery
+            best_action = max(eligible_actions, key=lambda a: true_nets[a])
             oracle_action_counts[best_action.value] += 1
 
+            # Exact Per-Case Regret:
+            # policy_value = true counterfactual net of policy's selected action
+            # oracle_value = true counterfactual net of oracle's chosen optimal action
+            # regret = max(0.0, oracle_value - policy_value)
             selected_net = true_nets[selected_action]
             best_net = true_nets[best_action]
             regret = max(0.0, best_net - selected_net)

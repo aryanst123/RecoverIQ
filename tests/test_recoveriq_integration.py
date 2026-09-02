@@ -99,3 +99,108 @@ def test_policy_cannot_access_hidden_potential_outcomes(loaded_recoveriq_policy)
     # Attempting to pass PotentialOutcome to evaluate_case must raise TypeError
     with pytest.raises(TypeError):
         loaded_recoveriq_policy.evaluate_case(pot_outcome)
+
+def test_oracle_regret_reconciliation_exact_formula(loaded_recoveriq_policy):
+    """
+    PROVES exact per-case regret reconciliation:
+    regret(case) = oracle_value(case) - policy_value(case)
+    where both values strictly reflect:
+    gross_recovered - action_cost - friction_cost
+    under shared eligibility constraints.
+    """
+    gen = SyntheticCaseGenerator(seed=789)
+    cases = gen.generate_batch(count=50, scenario_id="S5_HIGH_RECOVERY_HETEROGENEITY")
+    env = SimulationEnvironment(scenario_id="S5_HIGH_RECOVERY_HETEROGENEITY", seed=789)
+    for cust, pay, att, c, hidden in cases:
+        env.register_case(cust, pay, att, c, hidden)
+
+    diagnostic = OracleCounterfactualDiagnostic(policy=loaded_recoveriq_policy)
+
+    oracle_values = []
+    policy_values = []
+    per_case_regrets = []
+
+    for cust, pay, att, case, hidden in cases:
+        obs = env.get_observable_state(case.case_id, att.attempted_at)
+        eligible = loaded_recoveriq_policy.eligibility_service.get_eligible_actions(obs)
+        decision = loaded_recoveriq_policy.evaluate_case(obs, att.attempted_at)
+
+        true_nets = {
+            act: diagnostic.calculate_counterfactual_net(act, hidden, case.amount_due, case.automated_action_count)
+            for act in eligible
+        }
+
+        best_act = max(eligible, key=lambda a: true_nets[a])
+        oracle_val = true_nets[best_act]
+        policy_val = true_nets[decision.selected_action]
+
+        regret = max(0.0, oracle_val - policy_val)
+        oracle_values.append(oracle_val)
+        policy_values.append(policy_val)
+        per_case_regrets.append(regret)
+
+    # Diagnostic run
+    report = diagnostic.evaluate_policy_regret(cases, env)
+    mean_diag_regret = report["mean_regret_per_case"]
+
+    # Reconcile: mean regret equals mean of individual regrets
+    expected_mean_regret = float(np.mean(per_case_regrets))
+    assert np.isclose(mean_diag_regret, expected_mean_regret, atol=1e-5)
+    # Proves oracle_value >= policy_value for every single case
+    for o_val, p_val, r in zip(oracle_values, policy_values, per_case_regrets):
+        assert o_val >= p_val
+        assert np.isclose(r, o_val - p_val, atol=1e-5)
+
+def test_decision_and_trace_immutability():
+    """Verifies that PolicyDecision, DecisionTrace, and ActionEvaluation are strictly immutable."""
+    from dataclasses import FrozenInstanceError
+    from pydantic import ValidationError
+    from domain.models import PolicyDecision
+    from policy.evaluations import ActionEvaluation, DecisionTrace
+
+    eval_obj = ActionEvaluation(
+        action=ActionType.STOP,
+        probability=0.5,
+        control_probability=0.5,
+        incremental_probability=0.0,
+        residual_amount=1000.0,
+        expected_incremental_revenue=0.0,
+        action_cost=0.0,
+        friction_cost=0.0,
+        expected_net_recovery=0.0,
+        eligible=True,
+    )
+    with pytest.raises(FrozenInstanceError):
+        eval_obj.probability = 0.9
+
+    trace_obj = DecisionTrace(
+        case_id="case_mut_test",
+        model_version="v1",
+        policy_version="v1",
+        candidate_evaluations=[eval_obj],
+        selected_action=ActionType.STOP,
+        selection_reason="test",
+        constraints_applied=[],
+        confidence_score=0.8,
+        confidence_status="HIGH_CONFIDENCE",
+        timestamp=datetime.now(timezone.utc),
+    )
+    with pytest.raises(FrozenInstanceError):
+        trace_obj.confidence_score = 0.5
+
+    dec_obj = PolicyDecision(
+        decision_id="dec_01",
+        case_id="case_01",
+        candidate_actions=[ActionType.STOP],
+        selected_action=ActionType.STOP,
+        model_version="v1",
+        policy_version="v1",
+        confidence=0.8,
+        expected_incremental_recovery=0.0,
+        expected_cost=0.0,
+        expected_friction_cost=0.0,
+        net_expected_value=0.0,
+        decision_reason="test",
+    )
+    with pytest.raises(ValidationError):
+        dec_obj.selected_action = ActionType.REMINDER

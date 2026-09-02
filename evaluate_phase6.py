@@ -102,11 +102,20 @@ def main():
         tot = sum(counts.values())
         print(f"{bkt:15}: " + ", ".join(f"{k}: {(v/tot)*100.0:.1f}%" for k, v in counts.items()))
 
-    print("\n=== 3. POLICY ABLATIONS ===")
+    print("\n=== 3. POLICY ABLATIONS (COMPREHENSIVE METRICS) ===")
     ablation_harness = PolicyAblationHarness(adaptive_policy=policy, baseline_policy=baseline)
-    ablation_results = ablation_harness.run_ablations(states)
-    for variant, dist in ablation_results.items():
-        print(f"{variant}: {dist}")
+    ablation_results = ablation_harness.run_comprehensive_ablations(cohort, env)
+    for variant, metrics_dict in ablation_results.items():
+        print(f"\n[{variant}]")
+        print(f"  Gross Recovered: INR {metrics_dict['gross_recovered']:,.2f}")
+        print(f"  Total Net Recovered: INR {metrics_dict['net_recovered']:,.2f}")
+        print(f"  Mean Net / Case: INR {metrics_dict['mean_net_recovered']:.2f}")
+        print(f"  Action Cost: INR {metrics_dict['action_cost']:,.2f} | Friction Cost: INR {metrics_dict['friction_cost']:,.2f}")
+        print(f"  Recovery Rate: {metrics_dict['recovery_rate']:.1%}")
+        print(f"  Intervention Efficiency: {metrics_dict['intervention_efficiency']:.2f}")
+        print(f"  Unnecessary Intervention Rate: {metrics_dict['unnecessary_intervention_rate']:.1%}")
+        print(f"  Safety Violations: {metrics_dict['safety_violations']}")
+        print(f"  Action Dist (%): {metrics_dict['action_distribution']}")
 
     print("\n=== 4. SIMULATOR-ONLY ORACLE DIAGNOSTIC & REGRET ===")
     oracle_diag = OracleCounterfactualDiagnostic(policy=policy)

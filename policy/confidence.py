@@ -4,12 +4,14 @@ from domain.models import ObservableCaseState
 
 class PolicyConfidenceService:
     """
-    Evaluates policy confidence for action effect estimates.
-    Does NOT use raw payment probability as confidence.
-    Assesses:
-    1. Training sample support per action
-    2. Prediction margin away from random noise
-    3. Observable feature bounds (out-of-distribution detection)
+    Evaluates deterministic policy decision confidence for action effect estimates.
+    Strictly deterministic and reproducible. Does NOT use random perturbations.
+    Does NOT claim statistical confidence intervals or causal parameter uncertainty.
+    
+    Evaluates three observable criteria:
+    1. Training Sample Support: ratio of action observations relative to required minimum.
+    2. Prediction Decision Margin: calibrated distance from maximum-entropy boundary (0.50).
+    3. Domain Validity: verifies observable case features lie within supported distribution bounds.
     """
     def __init__(
         self,
@@ -36,7 +38,7 @@ class PolicyConfidenceService:
         else:
             support_score = max(0.1, support_sample_count / float(self.min_support_samples))
 
-        # 2. Margin Score: certainty of distinction from pure 50/50 noise
+        # 2. Decision Margin: distance of calibrated posterior from maximum-entropy boundary (0.50)
         prob_margin = abs(action_prob - 0.50) * 2.0 # in [0, 1]
         delta_margin = min(1.0, abs(action_prob - control_prob) * 3.0) # uplift clarity
         model_certainty = 0.5 * prob_margin + 0.5 * delta_margin
