@@ -1,7 +1,11 @@
+import os
+import sys
 import json
 import numpy as np
 from datetime import datetime, timezone
 from collections import defaultdict
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from evaluation.runner import ExperimentRunner
 from domain.enums import EvaluationArm, ActionType

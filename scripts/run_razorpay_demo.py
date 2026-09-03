@@ -1,7 +1,12 @@
+import os
+import sys
 import hmac
 import hashlib
 import json
 from datetime import datetime, timezone, timedelta
+
+# Ensure project root is in sys.path when running script
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from domain.models import RecoveryCase, Customer, Payment, ObservableCaseState
 from domain.enums import CaseState, PaymentStatus, ActionType, FailureCode, CustomerSegment, ChannelPreference

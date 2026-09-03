@@ -1,8 +1,11 @@
 import os
+import sys
 import yaml
 import hashlib
 import json
 from datetime import datetime, timezone
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models.dataset import DatasetBuilder
 from models.training import TLearnerTrainer
 from models.artifacts import ModelArtifactManager
