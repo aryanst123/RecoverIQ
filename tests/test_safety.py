@@ -135,3 +135,47 @@ def test_failure_injection_suite_f1_to_f13():
     assert success is False
     assert cs13.current_state == CaseState.MANUAL_REVIEW_REQUIRED
     assert cs13.terminal_reason == "ESCALATION_FAILURE"
+
+def test_f4_out_of_band_payment_capture_reconciliation():
+    """
+    F4: Payment becomes CAPTURED out-of-band on gateway before automated outreach.
+    Authoritative reconciliation MUST detect capture, transition case to RECOVERED,
+    block subsequent recovery outreach, create ZERO downstream side-effects, and log audit event.
+    """
+    import server
+    c = server.state.cases["case_DEMO_OVERRIDE"]
+    assert c.current_state == CaseState.RECOVERY_ELIGIBLE
+
+    req = server.FailureInjectionRequest(scenario_type="F4_OUT_OF_BAND_CAPTURE")
+    res = server.trigger_failure_injection(req)
+
+    assert res["execution_blocked"] is True
+    assert res["case_state"] == "RECOVERED"
+    assert res["residual_amount"] == 0.0
+    assert res["payment_status"] == "CAPTURED"
+    assert res["downstream_actions_created"] == 0
+
+    # Verify subsequent direct execution attempt against the case is blocked
+    from fastapi import HTTPException
+    with pytest.raises(HTTPException) as exc:
+        server.execute_case_action(c.case_id, server.ExecuteActionRequest(action_type="PAYMENT_LINK"))
+    assert exc.value.status_code == 400
+
+    # Verify structured audit event exists
+    audits = server.state.audit_logger.get_case_audit(c.case_id)
+    assert any(a.event_type == "ACTION_REJECTED_RECONCILIATION" for a in audits)
+
+def test_f5_concurrent_execution_race_condition():
+    """
+    F5: Two simultaneous execution requests for the same recovery case.
+    Case lock & reservation service MUST allow exactly ONE execution, reject the other,
+    increment action count by exactly 1, create 1 side-effect, and prevent race duplication.
+    """
+    import server
+    req = server.FailureInjectionRequest(scenario_type="F5_CONCURRENT_RACE")
+    res = server.trigger_failure_injection(req)
+
+    assert res["concurrent_requests"] == 2
+    assert res["successful_executions"] == 1
+    assert res["blocked_executions"] == 1
+    assert "Race condition contained: 1 executed / 1 blocked" in res["safety_action"]

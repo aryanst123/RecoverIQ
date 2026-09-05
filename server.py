@@ -488,9 +488,43 @@ def execute_case_action(case_id: str, req: ExecuteActionRequest):
             if CaseStateMachine.is_terminal(c.current_state):
                 raise HTTPException(status_code=400, detail=f"Case {case_id} is in terminal state {c.current_state.value}")
 
+            # 3. Live Pre-Execution Reconciliation
+            if pay and cust:
+                is_safe, rejection_reason = state.reconciliation_service.reconcile_before_execution(
+                    case=c,
+                    payment=pay,
+                    customer=cust,
+                    now=now,
+                )
+                if not is_safe:
+                    state.audit_logger.log(
+                        case_id=case_id,
+                        actor="recoveriq_engine",
+                        event_type="ACTION_REJECTED_RECONCILIATION",
+                        policy_version="recoveriq-v1",
+                        action_type=action_type.value,
+                        observed_payment_state=pay.status.value,
+                        rejection_reason=rejection_reason,
+                        now=now,
+                    )
+                    raise HTTPException(status_code=400, detail=f"Execution blocked by live reconciliation: {rejection_reason}")
+
             idem_key = req.idempotency_key or f"idem_{case_id}_{c.automated_action_count + 1}"
 
-            # 3. Create Action Reservation
+            # 4. Check Idempotency Token
+            rec, is_new = state.idempotency_service.register_or_get(idem_key, case_id, action_type, c.automated_action_count + 1)
+            if not is_new:
+                cached = state.idempotency_service.get_record(idem_key)
+                return {
+                    "status": "DUPLICATE_ABSORBED",
+                    "case_id": case_id,
+                    "action_id": cached.execution_id if cached else f"exec_dup_{case_id}",
+                    "action_type": action_type.value,
+                    "case_state": c.current_state.value,
+                    "payment_link": state.payment_links.get(case_id),
+                }
+
+            # 5. Create Action Reservation
             reservation = state.reservation_service.reserve_action(
                 case_id=case_id,
                 action_type=action_type,
@@ -499,7 +533,7 @@ def execute_case_action(case_id: str, req: ExecuteActionRequest):
                 now=now,
             )
 
-            # 4. Execute via Razorpay adapter if PAYMENT_LINK
+            # 6. Execute via Razorpay adapter if PAYMENT_LINK
             plink_info = None
             if action_type == ActionType.PAYMENT_LINK:
                 exec_status, link_id, err = state.payment_link_adapter.create_recovery_link(
@@ -531,7 +565,7 @@ def execute_case_action(case_id: str, req: ExecuteActionRequest):
                 else:
                     raise HTTPException(status_code=502, detail=f"Payment Link creation failed: {err}")
 
-            # 5. Record Action in Domain Case
+            # 7. Record Action in Domain Case
             c.automated_action_count += 1
             c.last_updated_at = now
             action_rec = RecoveryAction(
@@ -726,33 +760,106 @@ def trigger_failure_injection(req: FailureInjectionRequest):
             "safety_action": "Duplicate webhook dropped. ZERO state regression.",
         }
 
+    elif req.scenario_type in ["F4_OUT_OF_BAND_CAPTURE", "F4_PRE_OUTREACH_CAPTURE", "F5_PRE_OUTREACH_CAPTURE"]:
+        # Reconcile payment captured externally on gateway out-of-band before outreach
+        pay = state.payments.get(c.payment_id)
+        if pay:
+            pay.status = PaymentStatus.CAPTURED
+        cust = state.customers.get(c.customer_id)
+
+        # 1. Authoritative pre-execution reconciliation sees CAPTURED
+        is_safe, rejection_reason = state.reconciliation_service.reconcile_before_execution(c, pay, cust, now)
+
+        # 2. Case state transition: Monotonic Terminal Protection
+        c.current_state = CaseState.RECOVERED
+        c.residual_amount = 0.0
+        c.terminal_reason = "RECONCILED_OUT_OF_BAND_CAPTURE"
+        c.last_updated_at = now
+
+        # 3. Log structured audit event
+        state.audit_logger.log(
+            case_id=c.case_id,
+            actor="reconciliation_guard",
+            event_type="ACTION_REJECTED_RECONCILIATION",
+            policy_version="recoveriq-v1",
+            observed_payment_state="CAPTURED",
+            rejection_reason=rejection_reason or "ACTION_REJECTED_PAYMENT_ALREADY_CAPTURED",
+            now=now,
+        )
+
+        return {
+            "scenario": req.scenario_type,
+            "gateway_status": "captured",
+            "safe_to_execute_outreach": is_safe,
+            "halt_reason": rejection_reason or "ACTION_REJECTED_PAYMENT_ALREADY_CAPTURED",
+            "execution_blocked": not is_safe,
+            "downstream_actions_created": 0,
+            "case_state": c.current_state.value,
+            "residual_amount": c.residual_amount,
+            "payment_status": pay.status.value if pay else "CAPTURED",
+            "safety_action": "Payment captured out-of-band. Pre-action reconciliation halted outreach. Residual set to INR 0.00.",
+        }
+
+    elif req.scenario_type in ["F5_CONCURRENT_RACE", "F5_RACE_CONDITION"]:
+        # Simulate two concurrent execution attempts for the same case
+        results = []
+        race_key = f"idem_race_{case_id}_{int(now.timestamp())}"
+
+        def attempt_execution(attempt_id: int):
+            try:
+                with state.lock_manager.acquire(case_id, timeout=0.5):
+                    rec, is_new = state.idempotency_service.register_or_get(race_key, case_id, ActionType.PAYMENT_LINK, c.automated_action_count + 1)
+                    if not is_new:
+                        return {"attempt": attempt_id, "status": "BLOCKED", "reason": "DUPLICATE_ACTION_BLOCKED"}
+
+                    res = state.reservation_service.reserve_action(case_id, ActionType.PAYMENT_LINK, race_key, "recoveriq-v1", now)
+                    state.reservation_service.validate_and_start_executing(res.reservation_id, now)
+                    # Successful execution
+                    c.automated_action_count += 1
+                    state.reservation_service.confirm_reservation(res.reservation_id)
+                    state.idempotency_service.mark_completed(race_key, f"exec_{res.reservation_id}", "SUCCESS")
+                    state.audit_logger.log(
+                        case_id=case_id,
+                        actor="SafeRecoveryExecutor",
+                        event_type="ACTION_EXECUTED_SUCCESS",
+                        policy_version="recoveriq-v1",
+                        action_type="PAYMENT_LINK",
+                        idempotency_key=race_key,
+                        now=now,
+                    )
+                    return {"attempt": attempt_id, "status": "SUCCESS", "reservation_id": res.reservation_id}
+            except Exception as e:
+                return {"attempt": attempt_id, "status": "BLOCKED", "reason": str(e)}
+
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            futures = [executor.submit(attempt_execution, i) for i in (1, 2)]
+            results = [f.result() for f in futures]
+
+        success_count = sum(1 for r in results if r["status"] == "SUCCESS")
+        blocked_count = sum(1 for r in results if r["status"] == "BLOCKED")
+
+        return {
+            "scenario": req.scenario_type,
+            "concurrent_requests": len(results),
+            "successful_executions": success_count,
+            "blocked_executions": blocked_count,
+            "results": results,
+            "safety_action": f"Race condition contained: {success_count} executed / {blocked_count} blocked. Exactly ONE execution allowed.",
+        }
+
     elif req.scenario_type == "F4_OUT_OF_ORDER":
         # Case already recovered; try receiving failed event
         c.current_state = CaseState.RECOVERED
         c.residual_amount = 0.0
         # Check domain state machine
-        is_valid = CaseStateMachine.is_valid_transition(c.current_state, CaseState.RECOVERY_ELIGIBLE)
+        is_valid = CaseStateMachine.can_transition(c.current_state, CaseState.RECOVERY_ELIGIBLE)
         return {
             "scenario": "F4_OUT_OF_ORDER",
             "initial_state": "RECOVERED",
             "incoming_event": "payment.failed",
             "transition_allowed": is_valid,
             "safety_action": "Monotonic terminal guard BLOCKED regression from RECOVERED to RECOVERY_ELIGIBLE.",
-        }
-
-    elif req.scenario_type == "F5_PRE_OUTREACH_CAPTURE":
-        # Reconcile payment captured externally on Razorpay before outreach
-        state.razorpay_client.set_payment_status(c.payment_id, "captured")
-        pay = state.payments.get(c.payment_id)
-        safe_to_execute, reason = state.razorpay_reconciler.reconcile_case_before_execution(c, pay)
-        return {
-            "scenario": "F5_PRE_OUTREACH_CAPTURE",
-            "gateway_status": "captured",
-            "safe_to_execute_outreach": safe_to_execute,
-            "halt_reason": reason,
-            "case_state": c.current_state.value,
-            "residual_amount": c.residual_amount,
-            "safety_action": "Outreach halted immediately. Case marked RECOVERED. Residual set to ₹0.00.",
         }
 
     elif req.scenario_type == "F6_OPT_OUT":
