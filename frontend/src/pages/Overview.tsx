@@ -1,392 +1,314 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
-  TrendingUp,
-  AlertCircle,
+  ArrowRight,
   ShieldCheck,
   Zap,
-  ArrowRight,
-  Lock,
-  Layers,
-  Sparkles,
-  ExternalLink,
-  ChevronRight,
-  DollarSign,
-  Activity,
 } from 'lucide-react';
-import { Card } from '../components/common/Card';
-import { Badge } from '../components/common/Badge';
-import { api } from '../api/client';
-import { DashboardKPIs, BenchmarkResponse, CaseSummary, RazorpayStatus } from '../types';
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
+import { ErrorMessage } from '../components/common/ErrorMessage';
+import { useRecoverIQData } from '../context/useRecoverIQData';
+import { animateCounter, staggerReveal } from '../utils/motion';
 
 interface OverviewProps {
   onNavigate: (path: string) => void;
 }
 
 export const Overview: React.FC<OverviewProps> = ({ onNavigate }) => {
-  const [kpis, setKpis] = useState<DashboardKPIs | null>(null);
-  const [benchmark, setBenchmark] = useState<BenchmarkResponse | null>(null);
-  const [recentCases, setRecentCases] = useState<CaseSummary[]>([]);
-  const [razorpayStatus, setRazorpayStatus] = useState<RazorpayStatus | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { kpis, benchmark, cases, razorpayStatus, refreshKPIs, refreshBenchmark, refreshCases } = useRecoverIQData();
 
-  useEffect(() => {
-    Promise.all([
-      api.getKPIs().then(setKpis).catch(console.error),
-      api.getBenchmark().then(setBenchmark).catch(console.error),
-      api.getCases({ limit: 6 }).then((res) => setRecentCases(res.cases)).catch(console.error),
-      api.getRazorpayStatus().then(setRazorpayStatus).catch(console.error),
-    ]).finally(() => setLoading(false));
-  }, []);
+  const kpiRiskRef = useRef<HTMLSpanElement>(null);
+  const kpiRecoveredRef = useRef<HTMLDivElement>(null);
+  const kpiRateRef = useRef<HTMLDivElement>(null);
+  const kpiSafetyRef = useRef<HTMLDivElement>(null);
+
+  const bmControlRef = useRef<HTMLDivElement>(null);
+  const bmRiqRef = useRef<HTMLDivElement>(null);
+  const bmBaseRef = useRef<HTMLDivElement>(null);
+
+  const countRan = useRef(false);
 
   const formatCurrency = (val: number) =>
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);
 
+  // Mount guarantee
+  useEffect(() => {
+    if (!kpis.data && !kpis.loading) refreshKPIs();
+    if (!benchmark.data && !benchmark.loading) refreshBenchmark();
+    if (!cases.data && !cases.loading) refreshCases();
+  }, [kpis.data, kpis.loading, benchmark.data, benchmark.loading, cases.data, cases.loading, refreshKPIs, refreshBenchmark, refreshCases]);
+
+  // Anime.js count-up & sequential section entrance
+  useEffect(() => {
+    if (kpis.data && !countRan.current) {
+      countRan.current = true;
+
+      // Stagger sections
+      staggerReveal('.overview-section-block', { delay: 40, stagger: 55, translateY: 8 });
+
+      // Animate Hero KPI counters
+      animateCounter(kpiRiskRef.current, 0, kpis.data.revenue_at_risk_inr, {
+        formatter: (val) => formatCurrency(val),
+        duration: 800,
+      });
+
+      animateCounter(kpiRecoveredRef.current, 0, kpis.data.revenue_recovered_inr, {
+        formatter: (val) => formatCurrency(val),
+        duration: 750,
+      });
+
+      animateCounter(kpiRateRef.current, 0, kpis.data.recovery_rate * 100, {
+        formatter: (val) => `${val.toFixed(1)}% recovery rate`,
+        duration: 750,
+      });
+
+      animateCounter(kpiSafetyRef.current, 0, 10, {
+        formatter: (val) => `${Math.round(val)} / 10 Active`,
+        duration: 700,
+      });
+
+      setTimeout(() => {
+        staggerReveal('.overview-case-row', { delay: 15, stagger: 25 });
+      }, 100);
+    }
+  }, [kpis.data]);
+
+  // Animate benchmark counters when data arrives
+  useEffect(() => {
+    if (benchmark.data) {
+      const arms = benchmark.data.arms;
+      animateCounter(bmControlRef.current, 0, arms.CONTROL.Mean_Net_Per_Case, {
+        formatter: (val) => `₹${val.toFixed(2)}`,
+        duration: 850,
+      });
+      animateCounter(bmRiqRef.current, 0, arms.RECOVERIQ.Mean_Net_Per_Case, {
+        formatter: (val) => `₹${val.toFixed(2)}`,
+        duration: 850,
+      });
+      animateCounter(bmBaseRef.current, 0, arms.BASELINE.Mean_Net_Per_Case, {
+        formatter: (val) => `₹${val.toFixed(2)}`,
+        duration: 850,
+      });
+    }
+  }, [benchmark.data]);
+
+  const recentCases = cases.data?.cases.slice(0, 6) || [];
+
+  const formatFailureCode = (code: string) => {
+    return code
+      .split('_')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join(' ');
+  };
+
+  const getFailureColor = (code: string) => {
+    if (code.includes('FUNDS')) return 'text-amber-600 dark:text-amber-400';
+    if (code.includes('EXPIRED') || code.includes('AUTH')) return 'text-rose-600 dark:text-rose-400';
+    if (code.includes('UNAVAILABLE') || code.includes('TIMEOUT') || code.includes('NETWORK'))
+      return 'text-blue-600 dark:text-blue-400';
+    return 'text-slate-700 dark:text-[#A3A3A3]';
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Top Banner: Epistemic & Context Notice */}
-      <div className="rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/70 dark:bg-blue-950/30 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-start sm:items-center gap-3">
-          <div className="p-2 rounded-lg bg-blue-600 text-white shadow-sm mt-0.5 sm:mt-0">
-            <Zap className="w-5 h-5" />
-          </div>
+    <div className="space-y-10">
+      {/* 1. Dominant Hero Metric & Supporting KPIs */}
+      <div className="overview-section-block space-y-6">
+        <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-6 pb-6 border-b border-slate-200/80 dark:border-[#1F1F1F]">
           <div>
-            <div className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-              Razorpay AI Buildathon 2026 — Track 03: AI Revenue Recovery
-              <Badge variant="razorpay">PROTOTYPE</Badge>
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-[#737373] tracking-wide uppercase">
+              <span>Revenue at risk</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-[#1A1A1A] text-slate-500 font-mono">
+                DEMO QUEUE
+              </span>
             </div>
-            <div className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
-              Causal incremental recovery decision engine for failed one-time payments with bounded execution and live reconciliation.
+            <div className="mt-2 flex flex-wrap items-baseline gap-3">
+              <span ref={kpiRiskRef} className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white tabular-nums">
+                {kpis.data ? formatCurrency(kpis.data.revenue_at_risk_inr) : '₹1,05,583'}
+              </span>
+              <span className="text-sm text-slate-500 dark:text-[#A3A3A3]">
+                across <strong>{kpis.data?.total_failed_payments || 40} failed payments</strong>
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-6 sm:gap-10 text-xs">
+            <div>
+              <div className="text-slate-400 dark:text-[#737373] text-[11px]">Active recovery</div>
+              <div ref={kpiRecoveredRef} className="text-lg font-bold text-slate-900 dark:text-white mt-0.5 tabular-nums">
+                {kpis.data ? formatCurrency(kpis.data.revenue_recovered_inr) : '₹0'}
+              </div>
+            </div>
+
+            <div>
+              <div className="text-slate-400 dark:text-[#737373] text-[11px]">Recovery rate</div>
+              <div ref={kpiRateRef} className="text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 tabular-nums">
+                {kpis.data ? `${(kpis.data.recovery_rate * 100).toFixed(1)}%` : '0.0%'}
+              </div>
+            </div>
+
+            <div>
+              <div className="text-slate-400 dark:text-[#737373] text-[11px]">Safety invariants</div>
+              <div ref={kpiSafetyRef} className="text-lg font-bold text-blue-600 dark:text-blue-400 mt-0.5">
+                10 / 10 Active
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2 self-end sm:self-auto">
-          <button
-            onClick={() => onNavigate('/evaluation')}
-            className="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/80 transition-all flex items-center gap-1.5 shadow-sm"
-          >
-            View Benchmark Lab
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
+
+        {kpis.error && <ErrorMessage title="Failed to load overview metrics" message={kpis.error} onRetry={refreshKPIs} />}
       </div>
 
-      {/* Primary KPI Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* KPI 1: Revenue at Risk */}
-        <Card className="border-l-4 border-l-rose-500">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">
-              Revenue at Risk
-            </span>
-            <div className="p-1.5 rounded-md bg-rose-50 dark:bg-rose-950/60 text-rose-600">
-              <AlertCircle className="w-4 h-4" />
-            </div>
+      {/* 2. Priority Actionable Cases */}
+      <div className="overview-section-block space-y-3">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-[#1F1F1F]">
+          <div>
+            <h2 className="text-base font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+              <Zap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              Actionable Failed Payments
+            </h2>
           </div>
-          <div className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
-            {kpis ? formatCurrency(kpis.revenue_at_risk_inr) : '₹0'}
-          </div>
-          <div className="mt-1 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-            <span>{kpis?.total_failed_payments || 0} failed payments queued</span>
-          </div>
-        </Card>
-
-        {/* KPI 2: Net Recovered */}
-        <Card className="border-l-4 border-l-emerald-500">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">
-              Active Recovered
-            </span>
-            <div className="p-1.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600">
-              <TrendingUp className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-            {kpis ? formatCurrency(kpis.revenue_recovered_inr) : '₹0'}
-          </div>
-          <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            <span>{kpis?.recovered_cases_count || 0} cases resolved</span>
-          </div>
-        </Card>
-
-        {/* KPI 3: Recovery Rate */}
-        <Card className="border-l-4 border-l-blue-500">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">
-              Demo Recovery Rate
-            </span>
-            <div className="p-1.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-600">
-              <Activity className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
-            {kpis ? `${(kpis.recovery_rate * 100).toFixed(1)}%` : '0.0%'}
-          </div>
-          <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            <span>{kpis?.active_recovery_cases || 0} in active recovery</span>
-          </div>
-        </Card>
-
-        {/* KPI 4: Safety Violations */}
-        <Card className="border-l-4 border-l-indigo-500">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">
-              Critical Violations
-            </span>
-            <div className="p-1.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
-            0
-          </div>
-          <div className="mt-1 text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-medium">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>10/10 Invariants Active</span>
-          </div>
-        </Card>
-      </div>
-
-      {/* Main Grid: Frozen Benchmark Spotlight & Razorpay Adapter */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left 2 Cols: Frozen Benchmark Spotlight */}
-        <Card
-          className="lg:col-span-2"
-          title="Frozen 20,000-Case Scientific Holdout Benchmark"
-          subtitle="Direct machine-readable results from Phase 9 final evaluation (Seed: 999888777)"
-          badge={<Badge variant="frozen">FROZEN BENCHMARK</Badge>}
-          action={
-            <button
-              onClick={() => onNavigate('/evaluation')}
-              className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
-            >
-              Full Analysis <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          }
-        >
-          {benchmark ? (
-            <div className="space-y-5">
-              {/* 3-Arm Comparison Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {/* Arm A: Control */}
-                <div className="p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40">
-                  <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 font-semibold uppercase">
-                    Arm A: Control (No Outreach)
-                  </div>
-                  <div className="mt-1.5 text-xl font-bold text-slate-800 dark:text-slate-200 font-mono">
-                    ₹{benchmark.arms.CONTROL.Mean_Net_Per_Case.toFixed(2)}
-                  </div>
-                  <div className="mt-1 text-[11px] text-slate-500">
-                    Gross: ₹9.58M | Cost: ₹0
-                  </div>
-                  <div className="mt-2 text-[10px] text-slate-400 font-mono">
-                    Recovery Rate: {(benchmark.arms.CONTROL.Recovery_Rate * 100).toFixed(1)}%
-                  </div>
-                </div>
-
-                {/* Arm C: RecoverIQ-v1 */}
-                <div className="p-3.5 rounded-lg border border-blue-300 dark:border-blue-700/80 bg-blue-50/40 dark:bg-blue-950/20 relative">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono text-blue-600 dark:text-blue-400 font-bold uppercase">
-                      Arm C: RecoverIQ-v1
-                    </span>
-                    <Badge variant="primary" size="sm">AI ADAPTIVE</Badge>
-                  </div>
-                  <div className="mt-1.5 text-xl font-bold text-blue-600 dark:text-blue-400 font-mono">
-                    ₹{benchmark.arms.RECOVERIQ.Mean_Net_Per_Case.toFixed(2)}
-                  </div>
-                  <div className="mt-1 text-[11px] text-slate-500">
-                    Gross: ₹13.44M | Cost: ₹360K
-                  </div>
-                  <div className="mt-2 text-[10px] text-blue-600 dark:text-blue-400 font-mono">
-                    Recovery Rate: {(benchmark.arms.RECOVERIQ.Recovery_Rate * 100).toFixed(1)}%
-                  </div>
-                </div>
-
-                {/* Arm B: Baseline-v1 */}
-                <div className="p-3.5 rounded-lg border border-emerald-300 dark:border-emerald-700/80 bg-emerald-50/40 dark:bg-emerald-950/20">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-bold uppercase">
-                      Arm B: Baseline-v1
-                    </span>
-                    <Badge variant="success" size="sm">FROZEN WINNER</Badge>
-                  </div>
-                  <div className="mt-1.5 text-xl font-bold text-emerald-600 dark:text-emerald-400 font-mono">
-                    ₹{benchmark.arms.BASELINE.Mean_Net_Per_Case.toFixed(2)}
-                  </div>
-                  <div className="mt-1 text-[11px] text-slate-500">
-                    Gross: ₹16.39M | Cost: ₹92K
-                  </div>
-                  <div className="mt-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">
-                    Recovery Rate: {(benchmark.arms.BASELINE.Recovery_Rate * 100).toFixed(1)}%
-                  </div>
-                </div>
-              </div>
-
-              {/* Statistical Differences Banner */}
-              <div className="p-3.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/60 space-y-2">
-                <div className="text-xs font-semibold text-slate-900 dark:text-white flex items-center justify-between">
-                  <span>Statistical Inferences (2,000 Bootstrap Iterations, 95% Confidence)</span>
-                  <Badge variant="simulator">SCIENTIFIC RIGOR</Badge>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs">
-                  {/* RIQ vs Control */}
-                  <div className="flex items-start gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 mt-1" />
-                    <div>
-                      <div className="font-semibold text-emerald-600 dark:text-emerald-400">
-                        RecoverIQ vs Control: +₹526.36 / case
-                      </div>
-                      <div className="text-[11px] text-slate-500">
-                        95% CI: [+₹437.09, +₹616.16] (STATISTICALLY SIGNIFICANT POSITIVE)
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* RIQ vs Baseline */}
-                  <div className="flex items-start gap-2">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 mt-1" />
-                    <div>
-                      <div className="font-semibold text-rose-600 dark:text-rose-400">
-                        RecoverIQ vs Baseline: -₹481.20 / case
-                      </div>
-                      <div className="text-[11px] text-slate-500">
-                        95% CI: [-₹577.10, -₹383.87] (Over-escalation to ₹100 human review)
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="text-sm text-slate-500 py-8 text-center">Loading frozen benchmark metrics...</div>
-          )}
-        </Card>
-
-        {/* Right 1 Col: Razorpay Test Mode & Webhook Ingestion */}
-        <div className="space-y-6">
-          <Card
-            title="Razorpay Test Mode"
-            subtitle="Secure adapter connection"
-            badge={
-              <Badge variant={razorpayStatus?.status === 'CONNECTED' ? 'success' : 'warning'}>
-                {razorpayStatus?.status === 'CONNECTED' ? 'CONNECTED' : 'TEST MODE'}
-              </Badge>
-            }
-          >
-            <div className="space-y-3 text-xs">
-              <div className="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
-                <span className="text-slate-500">Environment</span>
-                <span className="font-mono font-semibold text-slate-900 dark:text-slate-100">TEST (rzp_test_*)</span>
-              </div>
-              <div className="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
-                <span className="text-slate-500">Production Key Protection</span>
-                <span className="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                  <Lock className="w-3 h-3" /> Fails Closed
-                </span>
-              </div>
-              <div className="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
-                <span className="text-slate-500">Webhook HMAC Verification</span>
-                <span className="font-mono text-emerald-600 dark:text-emerald-400">SHA-256 Active</span>
-              </div>
-              <div className="flex items-center justify-between py-1.5">
-                <span className="text-slate-500">Event Deduplication</span>
-                <span className="font-mono text-blue-600 dark:text-blue-400">x-razorpay-event-id</span>
-              </div>
-
-              <div className="pt-2">
-                <button
-                  onClick={() => onNavigate('/safety')}
-                  className="w-full py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center gap-1.5 transition-all"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
-                  Test Failure Scenarios
-                </button>
-              </div>
-            </div>
-          </Card>
-        </div>
-      </div>
-
-      {/* Bottom Section: Failed Payment Case Queue Preview */}
-      <Card
-        title="Failed Payment Recovery Queue"
-        subtitle="Recent payment failures queued for causal evaluation and bounded outreach"
-        badge={<Badge variant="simulator">DEMO QUEUE</Badge>}
-        action={
           <button
             onClick={() => onNavigate('/cases')}
-            className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+            className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 group cursor-pointer hover:translate-x-0.5 transition-transform"
           >
-            View All ({recentCases.length} loaded) <ArrowRight className="w-3.5 h-3.5" />
+            View all {cases.data?.total_count || 40} cases <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
           </button>
-        }
-      >
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead>
-              <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 font-mono uppercase text-[10px]">
-                <th className="py-2.5 px-3">Case ID</th>
-                <th className="py-2.5 px-3">Customer</th>
-                <th className="py-2.5 px-3">Amount Due</th>
-                <th className="py-2.5 px-3">Failure Reason</th>
-                <th className="py-2.5 px-3">Recommended Action</th>
-                <th className="py-2.5 px-3">Confidence</th>
-                <th className="py-2.5 px-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-              {recentCases.map((c) => (
-                <tr
-                  key={c.case_id}
-                  className="hover:bg-slate-50/80 dark:hover:bg-slate-900/40 transition-colors cursor-pointer"
-                  onClick={() => onNavigate(`/cases/${c.case_id}`)}
-                >
-                  <td className="py-3 px-3 font-mono font-semibold text-slate-900 dark:text-slate-100">
-                    {c.case_id}
-                  </td>
-                  <td className="py-3 px-3">
-                    <div className="font-medium text-slate-800 dark:text-slate-200">{c.customer_id}</div>
-                    <div className="text-[10px] text-slate-400 font-mono">{c.customer_segment}</div>
-                  </td>
-                  <td className="py-3 px-3 font-mono font-semibold text-slate-900 dark:text-white">
-                    {formatCurrency(c.amount_due)}
-                  </td>
-                  <td className="py-3 px-3">
-                    <Badge variant="warning">{c.failure_code}</Badge>
-                  </td>
-                  <td className="py-3 px-3">
-                    <Badge
-                      variant={
-                        c.recommended_action === 'PAYMENT_LINK'
-                          ? 'primary'
-                          : c.recommended_action === 'STOP'
-                          ? 'default'
-                          : 'warning'
-                      }
-                    >
-                      {c.recommended_action}
-                    </Badge>
-                  </td>
-                  <td className="py-3 px-3 font-mono text-slate-600 dark:text-slate-300">
-                    {(c.decision_confidence * 100).toFixed(0)}%
-                  </td>
-                  <td className="py-3 px-3 text-right">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onNavigate(`/cases/${c.case_id}`);
-                      }}
-                      className="p-1 text-blue-600 dark:text-blue-400 hover:text-blue-700"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
-      </Card>
+
+        {cases.loading && !cases.data ? (
+          <div className="space-y-3 py-3">
+            <LoadingSkeleton className="h-12 w-full" count={4} />
+          </div>
+        ) : (
+          <div className="divide-y divide-slate-100 dark:divide-[#1F1F1F] border-y border-slate-100 dark:border-[#1F1F1F]">
+            {recentCases.map((c) => (
+              <div
+                key={c.case_id}
+                onClick={() => onNavigate(`/cases/${c.case_id}`)}
+                className="overview-case-row group py-3 px-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/90 dark:hover:bg-[#141414] hover:shadow-2xs transition-all duration-150 cursor-pointer rounded-lg -mx-3"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6">
+                  <div className="w-24 shrink-0">
+                    <span className="text-base font-bold tracking-tight text-slate-900 dark:text-white tabular-nums">
+                      {formatCurrency(c.amount_due)}
+                    </span>
+                  </div>
+
+                  <div className="w-36 shrink-0">
+                    <span className={`text-xs font-medium ${getFailureColor(c.failure_code)}`}>
+                      {formatFailureCode(c.failure_code)}
+                    </span>
+                  </div>
+
+                  <div className="text-xs text-slate-500 dark:text-[#A3A3A3] flex items-center gap-2">
+                    <span className="font-mono text-slate-700 dark:text-[#D4D4D4]">{c.customer_id}</span>
+                    <span>·</span>
+                    <span className="font-mono text-[11px] text-slate-400">{c.case_id}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 self-end sm:self-center">
+                  <div className="text-right">
+                    <span className="text-xs font-semibold text-slate-900 dark:text-white">
+                      {c.recommended_action === 'PAYMENT_LINK' ? 'Payment link' : formatFailureCode(c.recommended_action)}
+                    </span>
+                    <span className="text-xs text-slate-400 ml-2 font-mono">
+                      {(c.decision_confidence * 100).toFixed(0)}%
+                    </span>
+                  </div>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-all duration-150" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* 3. Lower Tier: Frozen Holdout Benchmark & System Health */}
+      <div className="overview-section-block grid grid-cols-1 lg:grid-cols-3 gap-8 pt-2 border-t border-slate-200/80 dark:border-[#1F1F1F]">
+        {/* Benchmark Snapshot */}
+        <div className="lg:col-span-2 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                Frozen 20,000-Case Holdout Benchmark
+              </h3>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-mono">
+                Scenario S1
+              </span>
+            </div>
+            <button
+              onClick={() => onNavigate('/evaluation')}
+              className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 group cursor-pointer hover:translate-x-0.5 transition-transform"
+            >
+              Full evidence <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          </div>
+
+          {benchmark.loading && !benchmark.data ? (
+            <LoadingSkeleton className="h-16 w-full" />
+          ) : benchmark.data ? (
+            <div className="space-y-2">
+              <div className="grid grid-cols-3 gap-4 py-3.5 border-y border-slate-100 dark:border-[#1F1F1F] text-center">
+                <div>
+                  <div className="text-[11px] text-slate-400 uppercase">Control (0 outreach)</div>
+                  <div ref={bmControlRef} className="text-lg font-bold text-slate-800 dark:text-slate-200 mt-1 tabular-nums">
+                    ₹{benchmark.data.arms.CONTROL.Mean_Net_Per_Case.toFixed(2)}
+                  </div>
+                </div>
+
+                <div className="border-x border-slate-100 dark:border-[#1F1F1F]">
+                  <div className="text-[11px] text-blue-600 dark:text-blue-400 font-semibold uppercase">RecoverIQ-v1</div>
+                  <div ref={bmRiqRef} className="text-lg font-bold text-blue-600 dark:text-blue-400 mt-1 tabular-nums">
+                    ₹{benchmark.data.arms.RECOVERIQ.Mean_Net_Per_Case.toFixed(2)}
+                  </div>
+                  <div className="text-[10px] text-blue-500 mt-0.5 font-mono">+₹526.36 vs Control</div>
+                </div>
+
+                <div>
+                  <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase">Baseline-v1</div>
+                  <div ref={bmBaseRef} className="text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-1 tabular-nums">
+                    ₹{benchmark.data.arms.BASELINE.Mean_Net_Per_Case.toFixed(2)}
+                  </div>
+                  <div className="text-[10px] text-rose-500 mt-0.5 font-mono">-₹481.20 delta</div>
+                </div>
+              </div>
+
+              <p className="text-xs text-slate-500 dark:text-[#A3A3A3] pt-0.5 leading-relaxed">
+                RecoverIQ beat zero outreach, but underperformed the deterministic baseline due to over-escalation.
+              </p>
+            </div>
+          ) : null}
+        </div>
+
+        {/* System & Gateway Status */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            System & Gateway Health
+          </h3>
+
+          <div className="space-y-2 text-xs divide-y divide-slate-100 dark:divide-[#1F1F1F] border-y border-slate-100 dark:border-[#1F1F1F] py-1">
+            <div className="flex justify-between py-1.5">
+              <span className="text-slate-500">Gateway environment</span>
+              <span className="font-mono text-slate-900 dark:text-white">
+                {razorpayStatus.data?.environment?.toUpperCase() || 'TEST'} (rzp_test_*)
+              </span>
+            </div>
+            <div className="flex justify-between py-1.5">
+              <span className="text-slate-500">Webhook authentication</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-medium">HMAC-SHA256</span>
+            </div>
+            <div className="flex justify-between py-1.5">
+              <span className="text-slate-500">Safety invariants</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-medium">10 / 10 Active</span>
+            </div>
+            <div className="flex justify-between py-1.5">
+              <span className="text-slate-500">Production key safety</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-medium">Fails Closed</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

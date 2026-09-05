@@ -4,57 +4,77 @@
 
 @layer base {
   :root {
-    --bg-primary: #f8fafc;
+    --bg-base: #f9fafb;
     --bg-surface: #ffffff;
-    --bg-surface-elevated: #f1f5f9;
-    --border-color: #e2e8f0;
-    --text-primary: #0f172a;
-    --text-secondary: #64748b;
-    --text-muted: #94a3b8;
-    --accent-blue: #0c2340;
-    --accent-rzp: #3395ff;
-    --accent-red: #ef4444;
-    --accent-emerald: #10b981;
+    --border-subtle: #e5e7eb;
+    --border-dim: #f3f4f6;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --text-muted: #9ca3af;
   }
 
   .dark {
-    --bg-primary: #020617;
-    --bg-surface: #0b111e;
-    --bg-surface-elevated: #131d2e;
-    --border-color: #1e293b;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --accent-blue: #3395ff;
-    --accent-rzp: #3395ff;
-    --accent-red: #f87171;
-    --accent-emerald: #34d399;
+    --bg-base: #060606;
+    --bg-surface: #0f0f0f;
+    --border-subtle: #1f1f1f;
+    --border-dim: #141414;
+    --text-primary: #f9fafb;
+    --text-secondary: #a3a3a3;
+    --text-muted: #737373;
   }
 }
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-/* Custom crisp scrollbar */
+/* Subtle micro-interactions */
+button {
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.985);
+}
+
+/* Restrained scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.2);
+  background: rgba(163, 163, 163, 0.2);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.4);
+  background: rgba(163, 163, 163, 0.4);
 }
 
-/* Subtle geometric badge angle */
-.geometric-corner {
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

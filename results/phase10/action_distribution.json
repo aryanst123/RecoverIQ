@@ -1,0 +1,30 @@
+{
+  "Phase9_RecoverIQ_v1": {
+    "ESCALATE": 48.9,
+    "STOP": 29.7,
+    "PROMISE_TO_PAY": 8.1,
+    "PAYMENT_LINK": 12.6,
+    "REMINDER": 0.7
+  },
+  "Phase10_RecoverIQ_v2": {
+    "ESCALATE": 37.9,
+    "PROMISE_TO_PAY": 14.5,
+    "PAYMENT_LINK": 36.6,
+    "STOP": 9.0,
+    "REMINDER": 2.0
+  },
+  "Deterministic_Baseline": {
+    "REMINDER": 41.2,
+    "STOP": 10.9,
+    "PAYMENT_LINK": 21.4,
+    "ESCALATE": 5.3,
+    "PROMISE_TO_PAY": 21.1
+  },
+  "Oracle": {
+    "STOP": 60.7,
+    "REMINDER": 20.5,
+    "PAYMENT_LINK": 9.9,
+    "PROMISE_TO_PAY": 5.8,
+    "ESCALATE": 3.1
+  }
+}

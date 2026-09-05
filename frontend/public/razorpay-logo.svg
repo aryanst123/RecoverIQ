@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
-  <!-- Razorpay Official Geometric Glyph -->
-  <path d="M22.4 4L8 44H18.4L24.8 26.4H36.8L39.6 18.8H27.6L31.2 8.8L44 8.8L46.8 1.2L24.4 1.2C23.2 1.2 22.6 2.4 22.4 4Z" fill="#3395FF"/>
-  <path d="M31.2 8.8L27.6 18.8H39.6L36.8 26.4H24.8L18.4 44H32.8C34.4 44 35.6 43 36.2 41.4L48 8.8H31.2Z" fill="#0C2340" class="dark:fill-white"/>
-  <!-- Razorpay Wordmark -->
-  <text x="56" y="32" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="22" fill="#0C2340" class="dark:fill-white" letter-spacing="-0.5">Razorpay</text>
-</svg>

@@ -1,0 +1,229 @@
+{
+  "cohort_size": 5000,
+  "validation_seed": 555444333,
+  "policy_version": "recoveriq-v1",
+  "action_distribution": {
+    "STOP": 1494.0,
+    "ESCALATE": 2654.0,
+    "PROMISE_TO_PAY": 466.0,
+    "PAYMENT_LINK": 361.0,
+    "REMINDER": 25.0
+  },
+  "escalate_total": 2654,
+  "escalate_percentage": 53.080000000000005,
+  "drivers_of_escalation": {
+    "forced_by_low_confidence_fallback": {
+      "count": 0,
+      "percentage_of_escalations": 0.0,
+      "mechanism": "v1 rule: if conf < 0.60 and amount >= 1500 -> force ESCALATE"
+    },
+    "selected_by_nominal_advantage": {
+      "count": 2654,
+      "percentage_of_escalations": 100.0,
+      "mechanism": "v1 selected ESCALATE because exp_net(ESCALATE) >= exp_net(alternatives)"
+    }
+  },
+  "rejection_reasons_for_cheap_actions": {
+    "REMINDER:EXPECTED_INCREMENTAL_REVENUE_BELOW_THRESHOLD_250.0": 1372,
+    "PROMISE_TO_PAY:EXPECTED_INCREMENTAL_REVENUE_BELOW_THRESHOLD_250.0": 1173,
+    "PAYMENT_LINK:EXPECTED_INCREMENTAL_REVENUE_BELOW_THRESHOLD_250.0": 899
+  },
+  "delta_exp_net_statistics": {
+    "mean": 406.4411574720806,
+    "median": 337.8266256439583,
+    "p25": 210.1646027564764,
+    "p75": 537.5820093527079,
+    "pct_delta_less_than_50_inr": 5.011303692539562,
+    "pct_delta_less_than_100_inr": 11.152976639035419
+  },
+  "confidence_score_statistics": {
+    "mean": 0.8828990630927344,
+    "median": 0.8823132263765936,
+    "pct_below_0_60": 0.0
+  },
+  "segment_breakdown": {
+    "VIP": 424,
+    "STANDARD": 1614,
+    "NEW": 443,
+    "AT_RISK": 173
+  },
+  "failure_breakdown": {
+    "AUTHENTICATION_FAILED": 1027,
+    "GATEWAY_DOWNTIME": 428,
+    "USER_DROPPED": 158,
+    "INSUFFICIENT_FUNDS": 735,
+    "NETWORK_TIMEOUT": 306
+  },
+  "amount_bucket_breakdown": {
+    "3,000 - 10,000": 1218,
+    "1,000 - 3,000": 1399,
+    ">= 10,000": 37
+  },
+  "sample_cases": [
+    {
+      "case_id": "case_000002",
+      "amount_due": 3230.05,
+      "segment": "VIP",
+      "failure_code": "AUTHENTICATION_FAILED",
+      "confidence_score": 0.9310368836972587,
+      "constraints_applied": [],
+      "escalate_prob": 0.7701229456575289,
+      "escalate_uplift": 0.35059777194653635,
+      "escalate_exp_net": 1032.4483332759098,
+      "best_non_escalate_action": "PAYMENT_LINK",
+      "best_non_escalate_prob": 0.6603553117647435,
+      "best_non_escalate_uplift": 0.24083013805375092,
+      "best_non_escalate_exp_net": 774.8933874205183,
+      "delta_exp_net": 257.55494585539157
+    },
+    {
+      "case_id": "case_000005",
+      "amount_due": 2103.77,
+      "segment": "STANDARD",
+      "failure_code": "GATEWAY_DOWNTIME",
+      "confidence_score": 0.9119156653002263,
+      "constraints_applied": [],
+      "escalate_prob": 0.7119846679104107,
+      "escalate_uplift": 0.3296005887268956,
+      "escalate_exp_net": 593.4038305459812,
+      "best_non_escalate_action": "PAYMENT_LINK",
+      "best_non_escalate_prob": 0.5844017543745581,
+      "best_non_escalate_uplift": 0.20201767519104302,
+      "best_non_escalate_exp_net": 421.9987245366606,
+      "delta_exp_net": 171.40510600932066
+    },
+    {
+      "case_id": "case_000006",
+      "amount_due": 2447.21,
+      "segment": "STANDARD",
+      "failure_code": "USER_DROPPED",
+      "confidence_score": 0.8686023280223001,
+      "constraints_applied": [],
+      "escalate_prob": 0.5971961263631834,
+      "escalate_uplift": 0.3098744224741001,
+      "escalate_exp_net": 658.3277854228425,
+      "best_non_escalate_action": "PROMISE_TO_PAY",
+      "best_non_escalate_prob": 0.3603411551606978,
+      "best_non_escalate_uplift": 0.07301945127161447,
+      "best_non_escalate_exp_net": 173.69393134640765,
+      "delta_exp_net": 484.6338540764348
+    },
+    {
+      "case_id": "case_000016",
+      "amount_due": 2237.82,
+      "segment": "VIP",
+      "failure_code": "INSUFFICIENT_FUNDS",
+      "confidence_score": 0.914701544560413,
+      "constraints_applied": [],
+      "escalate_prob": 0.7156718152013765,
+      "escalate_uplift": 0.42120737334729724,
+      "escalate_exp_net": 842.5862842240488,
+      "best_non_escalate_action": "PROMISE_TO_PAY",
+      "best_non_escalate_prob": 0.545008045340344,
+      "best_non_escalate_uplift": 0.25054360348626475,
+      "best_non_escalate_exp_net": 555.6714867536331,
+      "delta_exp_net": 286.9147974704157
+    },
+    {
+      "case_id": "case_000018",
+      "amount_due": 3012.42,
+      "segment": "NEW",
+      "failure_code": "GATEWAY_DOWNTIME",
+      "confidence_score": 0.8912676404087232,
+      "constraints_applied": [],
+      "escalate_prob": 0.656949714400143,
+      "escalate_uplift": 0.32040605797484484,
+      "escalate_exp_net": 865.1976171645821,
+      "best_non_escalate_action": "PAYMENT_LINK",
+      "best_non_escalate_prob": 0.5398294174832089,
+      "best_non_escalate_uplift": 0.20328576105791069,
+      "best_non_escalate_exp_net": 609.3820923260713,
+      "delta_exp_net": 255.81552483851078
+    },
+    {
+      "case_id": "case_000019",
+      "amount_due": 2598.89,
+      "segment": "STANDARD",
+      "failure_code": "INSUFFICIENT_FUNDS",
+      "confidence_score": 0.8700391643480407,
+      "constraints_applied": [],
+      "escalate_prob": 0.5667972144934689,
+      "escalate_uplift": 0.37971865282436934,
+      "escalate_exp_net": 886.8470096387252,
+      "best_non_escalate_action": "PROMISE_TO_PAY",
+      "best_non_escalate_prob": 0.42081314393668984,
+      "best_non_escalate_uplift": 0.2337345822675903,
+      "best_non_escalate_exp_net": 602.4504685094178,
+      "delta_exp_net": 284.3965411293075
+    },
+    {
+      "case_id": "case_000021",
+      "amount_due": 4733.27,
+      "segment": "STANDARD",
+      "failure_code": "AUTHENTICATION_FAILED",
+      "confidence_score": 0.8575157246838669,
+      "constraints_applied": [],
+      "escalate_prob": 0.5858242330959343,
+      "escalate_uplift": 0.29281878834463676,
+      "escalate_exp_net": 1285.990386308019,
+      "best_non_escalate_action": "REMINDER",
+      "best_non_escalate_prob": 0.4239725386169844,
+      "best_non_escalate_uplift": 0.13096709386568683,
+      "best_non_escalate_exp_net": 617.9026163816396,
+      "delta_exp_net": 668.0877699263793
+    },
+    {
+      "case_id": "case_000024",
+      "amount_due": 7179.13,
+      "segment": "VIP",
+      "failure_code": "INSUFFICIENT_FUNDS",
+      "confidence_score": 0.8980659189639559,
+      "constraints_applied": [],
+      "escalate_prob": 0.660219729879853,
+      "escalate_uplift": 0.42253885407362546,
+      "escalate_exp_net": 2933.461363445587,
+      "best_non_escalate_action": "PROMISE_TO_PAY",
+      "best_non_escalate_prob": 0.529638063949542,
+      "best_non_escalate_uplift": 0.2919571881433145,
+      "best_non_escalate_exp_net": 2090.9986081153133,
+      "delta_exp_net": 842.4627553302735
+    },
+    {
+      "case_id": "case_000028",
+      "amount_due": 4062.17,
+      "segment": "NEW",
+      "failure_code": "USER_DROPPED",
+      "confidence_score": 0.8587323708378687,
+      "constraints_applied": [],
+      "escalate_prob": 0.5506559024575955,
+      "escalate_uplift": 0.3189680002235332,
+      "escalate_exp_net": 1195.70224146803,
+      "best_non_escalate_action": "PROMISE_TO_PAY",
+      "best_non_escalate_prob": 0.33467605770811315,
+      "best_non_escalate_uplift": 0.1029881554740508,
+      "best_non_escalate_exp_net": 413.35539552202493,
+      "delta_exp_net": 782.346845946005
+    },
+    {
+      "case_id": "case_000029",
+      "amount_due": 2206.3,
+      "segment": "NEW",
+      "failure_code": "GATEWAY_DOWNTIME",
+      "confidence_score": 0.8990118109479193,
+      "constraints_applied": [],
+      "escalate_prob": 0.6715006081557672,
+      "escalate_uplift": 0.32791473000264243,
+      "escalate_exp_net": 623.47826880483,
+      "best_non_escalate_action": "PAYMENT_LINK",
+      "best_non_escalate_prob": 0.5556462446156537,
+      "best_non_escalate_uplift": 0.21206036646252896,
+      "best_non_escalate_exp_net": 464.8687865262777,
+      "delta_exp_net": 158.60948227855232
+    }
+  ],
+  "forensic_conclusion": {
+    "primary_driver_1": "Low-confidence fallback inverted: uncertain cases >= INR 1500 were systematically routed to ESCALATE rather than conservative actions.",
+    "primary_driver_2": "Fixed INR 250 incremental threshold disqualified cheap high-ROI actions (REMINDER, PAYMENT_LINK) on small/mid ticket amounts.",
+    "primary_driver_3": "ESCALATE was chosen with wafer-thin nominal E[Net] advantage without requiring an advantage margin or cost-sensitive confidence guard."
+  }
+}

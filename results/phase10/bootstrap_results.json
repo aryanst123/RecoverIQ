@@ -1,0 +1,42 @@
+{
+  "RecoverIQ_v2_vs_Baseline": {
+    "point_estimate": -443.66692999999987,
+    "ci_95": [
+      -567.5683477499999,
+      -313.99061962500036
+    ],
+    "classification": "STATISTICALLY_SIGNIFICANT_NEGATIVE"
+  },
+  "RecoverIQ_v2_vs_RecoverIQ_v1": {
+    "point_estimate": -46.493375000000015,
+    "ci_95": [
+      -171.0235344375001,
+      70.75963012499987
+    ],
+    "classification": "INCONCLUSIVE"
+  },
+  "RecoverIQ_v2_vs_Control": {
+    "point_estimate": 602.3636624999999,
+    "ci_95": [
+      489.398249,
+      712.2190248125
+    ],
+    "classification": "STATISTICALLY_SIGNIFICANT_POSITIVE"
+  },
+  "RecoverIQ_v1_vs_Baseline": {
+    "point_estimate": -397.17355499999985,
+    "ci_95": [
+      -522.0084158749999,
+      -269.06320450000027
+    ],
+    "classification": "STATISTICALLY_SIGNIFICANT_NEGATIVE"
+  },
+  "RecoverIQ_v2_vs_Ablation": {
+    "point_estimate": -96.06979749999982,
+    "ci_95": [
+      -216.273423375,
+      27.965871749999632
+    ],
+    "classification": "INCONCLUSIVE"
+  }
+}

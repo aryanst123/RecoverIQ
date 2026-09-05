@@ -1,0 +1,573 @@
+{
+  "timestamp": "2026-09-05T06:45:59Z",
+  "validation_dataset_size": 5000,
+  "validation_seed": 555444333,
+  "selected_configuration": "Margin_INR_50",
+  "selected_parameters": {
+    "name": "Margin_INR_50",
+    "margin": 50.0,
+    "conf_gate": 0.0,
+    "lambda": 0.0
+  },
+  "selected_metrics": {
+    "n_cases": 5000,
+    "total_net": 10194369.16000002,
+    "mean_net_per_case": 2038.873832,
+    "gross_recovery": 10464521.160000017,
+    "action_cost": 263707.0,
+    "friction_cost": 6445.0,
+    "recovery_rate": 0.7394,
+    "unnecessary_intervention_rate": 0.49176919078149367,
+    "action_distribution": {
+      "PAYMENT_LINK": 34.216335540838855,
+      "ESCALATE": 39.750867234310945,
+      "PROMISE_TO_PAY": 15.43677073478398,
+      "STOP": 9.003468937243772,
+      "REMINDER": 1.5925575528224534
+    },
+    "segment_mean_std": 242.90872653922622
+  },
+  "selection_rationale": "Maximizes validation Net Recovery (INR 2038.87/case) while strictly satisfying stability, non-pathology, and diversity constraints. Escalate frequency is disciplined to 39.8%.",
+  "all_candidates": [
+    {
+      "name": "Clean_Economic_Baseline",
+      "parameters": {
+        "name": "Clean_Economic_Baseline",
+        "margin": 0.0,
+        "conf_gate": 0.0,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10176703.23000002,
+        "mean_net_per_case": 2035.340646,
+        "gross_recovery": 10459508.23000002,
+        "action_cost": 276390.0,
+        "friction_cost": 6415.0,
+        "recovery_rate": 0.7384,
+        "unnecessary_intervention_rate": 0.4921102826426218,
+        "action_distribution": {
+          "PAYMENT_LINK": 33.93169181890389,
+          "ESCALATE": 42.160444797458304,
+          "PROMISE_TO_PAY": 13.915806195393168,
+          "STOP": 8.387609213661635,
+          "REMINDER": 1.6044479745830023
+        },
+        "segment_mean_std": 249.53710075102643
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 188.58
+    },
+    {
+      "name": "Margin_INR_25",
+      "parameters": {
+        "name": "Margin_INR_25",
+        "margin": 25.0,
+        "conf_gate": 0.0,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10186159.880000023,
+        "mean_net_per_case": 2037.2319759999998,
+        "gross_recovery": 10465345.88000002,
+        "action_cost": 272756.0,
+        "friction_cost": 6430.0,
+        "recovery_rate": 0.7386,
+        "unnecessary_intervention_rate": 0.4919396775871035,
+        "action_distribution": {
+          "PAYMENT_LINK": 34.14208690136378,
+          "ESCALATE": 41.48430066603235,
+          "PROMISE_TO_PAY": 14.25626387567396,
+          "STOP": 8.51569933396765,
+          "REMINDER": 1.601649222962258
+        },
+        "segment_mean_std": 243.95252796318573
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 13.91
+    },
+    {
+      "name": "Margin_INR_50",
+      "parameters": {
+        "name": "Margin_INR_50",
+        "margin": 50.0,
+        "conf_gate": 0.0,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10194369.16000002,
+        "mean_net_per_case": 2038.873832,
+        "gross_recovery": 10464521.160000017,
+        "action_cost": 263707.0,
+        "friction_cost": 6445.0,
+        "recovery_rate": 0.7394,
+        "unnecessary_intervention_rate": 0.49176919078149367,
+        "action_distribution": {
+          "PAYMENT_LINK": 34.216335540838855,
+          "ESCALATE": 39.750867234310945,
+          "PROMISE_TO_PAY": 15.43677073478398,
+          "STOP": 9.003468937243772,
+          "REMINDER": 1.5925575528224534
+        },
+        "segment_mean_std": 242.90872653922622
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 14.99
+    },
+    {
+      "name": "Margin_INR_75",
+      "parameters": {
+        "name": "Margin_INR_75",
+        "margin": 75.0,
+        "conf_gate": 0.0,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10180290.36000002,
+        "mean_net_per_case": 2036.0580719999998,
+        "gross_recovery": 10442909.360000016,
+        "action_cost": 256159.0,
+        "friction_cost": 6460.0,
+        "recovery_rate": 0.7388,
+        "unnecessary_intervention_rate": 0.4919452624285467,
+        "action_distribution": {
+          "PAYMENT_LINK": 34.373529872981024,
+          "ESCALATE": 38.2938685902462,
+          "PROMISE_TO_PAY": 16.23020228947781,
+          "STOP": 9.471538340912655,
+          "REMINDER": 1.6308609063823116
+        },
+        "segment_mean_std": 243.0190104304611
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 14.32
+    },
+    {
+      "name": "Margin_INR_100",
+      "parameters": {
+        "name": "Margin_INR_100",
+        "margin": 100.0,
+        "conf_gate": 0.0,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10167070.770000018,
+        "mean_net_per_case": 2033.4141539999998,
+        "gross_recovery": 10421759.770000013,
+        "action_cost": 248139.0,
+        "friction_cost": 6550.0,
+        "recovery_rate": 0.7374,
+        "unnecessary_intervention_rate": 0.491961970613656,
+        "action_distribution": {
+          "PAYMENT_LINK": 34.943890274314214,
+          "ESCALATE": 36.751870324189525,
+          "PROMISE_TO_PAY": 16.84850374064838,
+          "STOP": 9.834788029925187,
+          "REMINDER": 1.6209476309226933
+        },
+        "segment_mean_std": 247.8512567794037
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 18.17
+    },
+    {
+      "name": "Margin_INR_150",
+      "parameters": {
+        "name": "Margin_INR_150",
+        "margin": 150.0,
+        "conf_gate": 0.0,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10130452.680000018,
+        "mean_net_per_case": 2026.090536,
+        "gross_recovery": 10371276.680000007,
+        "action_cost": 234049.0,
+        "friction_cost": 6775.0,
+        "recovery_rate": 0.7354,
+        "unnecessary_intervention_rate": 0.49286328460877044,
+        "action_distribution": {
+          "PAYMENT_LINK": 36.26814952116157,
+          "ESCALATE": 34.15199258572753,
+          "PROMISE_TO_PAY": 17.46987951807229,
+          "STOP": 10.179178251467407,
+          "REMINDER": 1.930800123571208
+        },
+        "segment_mean_std": 256.81720257037233
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 18.29
+    },
+    {
+      "name": "Margin_INR_200",
+      "parameters": {
+        "name": "Margin_INR_200",
+        "margin": 200.0,
+        "conf_gate": 0.0,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10129705.680000016,
+        "mean_net_per_case": 2025.941136,
+        "gross_recovery": 10354764.680000009,
+        "action_cost": 218014.0,
+        "friction_cost": 7045.0,
+        "recovery_rate": 0.7336,
+        "unnecessary_intervention_rate": 0.492907195351222,
+        "action_distribution": {
+          "PAYMENT_LINK": 37.41029164757978,
+          "ESCALATE": 31.19560238204306,
+          "PROMISE_TO_PAY": 18.56772026263552,
+          "STOP": 10.658115742861506,
+          "REMINDER": 2.168269964880134
+        },
+        "segment_mean_std": 244.17386357093983
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 17.7
+    },
+    {
+      "name": "Margin_INR_300",
+      "parameters": {
+        "name": "Margin_INR_300",
+        "margin": 300.0,
+        "conf_gate": 0.0,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10044981.36000002,
+        "mean_net_per_case": 2008.9962719999999,
+        "gross_recovery": 10224032.360000018,
+        "action_cost": 170731.0,
+        "friction_cost": 8320.0,
+        "recovery_rate": 0.724,
+        "unnecessary_intervention_rate": 0.4946022255439296,
+        "action_distribution": {
+          "PAYMENT_LINK": 42.027284729353084,
+          "ESCALATE": 22.693266832917704,
+          "PROMISE_TO_PAY": 20.62490831744169,
+          "STOP": 11.676690626375239,
+          "REMINDER": 2.977849493912278
+        },
+        "segment_mean_std": 245.27945346759273
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 22.61
+    },
+    {
+      "name": "ConfGate_0.60",
+      "parameters": {
+        "name": "ConfGate_0.60",
+        "margin": 0.0,
+        "conf_gate": 0.6,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10176703.23000002,
+        "mean_net_per_case": 2035.340646,
+        "gross_recovery": 10459508.23000002,
+        "action_cost": 276390.0,
+        "friction_cost": 6415.0,
+        "recovery_rate": 0.7384,
+        "unnecessary_intervention_rate": 0.4921102826426218,
+        "action_distribution": {
+          "PAYMENT_LINK": 33.93169181890389,
+          "ESCALATE": 42.160444797458304,
+          "PROMISE_TO_PAY": 13.915806195393168,
+          "STOP": 8.387609213661635,
+          "REMINDER": 1.6044479745830023
+        },
+        "segment_mean_std": 249.53710075102643
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 13.91
+    },
+    {
+      "name": "ConfGate_0.70",
+      "parameters": {
+        "name": "ConfGate_0.70",
+        "margin": 0.0,
+        "conf_gate": 0.7,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10176703.23000002,
+        "mean_net_per_case": 2035.340646,
+        "gross_recovery": 10459508.23000002,
+        "action_cost": 276390.0,
+        "friction_cost": 6415.0,
+        "recovery_rate": 0.7384,
+        "unnecessary_intervention_rate": 0.4921102826426218,
+        "action_distribution": {
+          "PAYMENT_LINK": 33.93169181890389,
+          "ESCALATE": 42.160444797458304,
+          "PROMISE_TO_PAY": 13.915806195393168,
+          "STOP": 8.387609213661635,
+          "REMINDER": 1.6044479745830023
+        },
+        "segment_mean_std": 249.53710075102643
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 13.77
+    },
+    {
+      "name": "ConfGate_0.80",
+      "parameters": {
+        "name": "ConfGate_0.80",
+        "margin": 0.0,
+        "conf_gate": 0.8,
+        "lambda": 0.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10162563.24000002,
+        "mean_net_per_case": 2032.5126480000001,
+        "gross_recovery": 10444415.240000019,
+        "action_cost": 275437.0,
+        "friction_cost": 6415.0,
+        "recovery_rate": 0.7378,
+        "unnecessary_intervention_rate": 0.4921102826426218,
+        "action_distribution": {
+          "PAYMENT_LINK": 33.8886244645407,
+          "ESCALATE": 41.94827859749326,
+          "PROMISE_TO_PAY": 14.040932889100427,
+          "STOP": 8.503887037918451,
+          "REMINDER": 1.618277010947168
+        },
+        "segment_mean_std": 249.50834258453753
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 14.19
+    },
+    {
+      "name": "Uncertainty_Lambda_0.5",
+      "parameters": {
+        "name": "Uncertainty_Lambda_0.5",
+        "margin": 0.0,
+        "conf_gate": 0.0,
+        "lambda": 0.5
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10169663.440000022,
+        "mean_net_per_case": 2033.9326880000003,
+        "gross_recovery": 10451699.440000018,
+        "action_cost": 275626.0,
+        "friction_cost": 6410.0,
+        "recovery_rate": 0.7382,
+        "unnecessary_intervention_rate": 0.4921956295525494,
+        "action_distribution": {
+          "PAYMENT_LINK": 33.9367952993489,
+          "ESCALATE": 42.02000952834683,
+          "PROMISE_TO_PAY": 14.02255042083532,
+          "STOP": 8.43258694616484,
+          "REMINDER": 1.588057805304113
+        },
+        "segment_mean_std": 245.46259957323974
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 14.06
+    },
+    {
+      "name": "Uncertainty_Lambda_1.0",
+      "parameters": {
+        "name": "Uncertainty_Lambda_1.0",
+        "margin": 0.0,
+        "conf_gate": 0.0,
+        "lambda": 1.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10174003.550000021,
+        "mean_net_per_case": 2034.8007100000002,
+        "gross_recovery": 10455294.550000018,
+        "action_cost": 274866.0,
+        "friction_cost": 6425.0,
+        "recovery_rate": 0.7382,
+        "unnecessary_intervention_rate": 0.4920249653259362,
+        "action_distribution": {
+          "PAYMENT_LINK": 34.0,
+          "ESCALATE": 41.87301587301587,
+          "PROMISE_TO_PAY": 14.095238095238095,
+          "STOP": 8.444444444444445,
+          "REMINDER": 1.5873015873015872
+        },
+        "segment_mean_std": 242.48575297567731
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 14.32
+    },
+    {
+      "name": "Uncertainty_Lambda_2.0",
+      "parameters": {
+        "name": "Uncertainty_Lambda_2.0",
+        "margin": 0.0,
+        "conf_gate": 0.0,
+        "lambda": 2.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10170768.210000023,
+        "mean_net_per_case": 2034.1536420000002,
+        "gross_recovery": 10450264.210000018,
+        "action_cost": 273056.0,
+        "friction_cost": 6440.0,
+        "recovery_rate": 0.738,
+        "unnecessary_intervention_rate": 0.49185441941074526,
+        "action_distribution": {
+          "PAYMENT_LINK": 34.04120443740095,
+          "ESCALATE": 41.50554675118859,
+          "PROMISE_TO_PAY": 14.294770206022186,
+          "STOP": 8.55784469096672,
+          "REMINDER": 1.600633914421553
+        },
+        "segment_mean_std": 246.10191445926222
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 16.28
+    },
+    {
+      "name": "Composite_Margin50_Lambda1.0",
+      "parameters": {
+        "name": "Composite_Margin50_Lambda1.0",
+        "margin": 50.0,
+        "conf_gate": 0.0,
+        "lambda": 1.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10181878.36000002,
+        "mean_net_per_case": 2036.375672,
+        "gross_recovery": 10447851.360000016,
+        "action_cost": 259518.0,
+        "friction_cost": 6455.0,
+        "recovery_rate": 0.739,
+        "unnecessary_intervention_rate": 0.49203049203049204,
+        "action_distribution": {
+          "PAYMENT_LINK": 34.150172792962614,
+          "ESCALATE": 38.909833490417846,
+          "PROMISE_TO_PAY": 15.99120326735784,
+          "STOP": 9.330819981149858,
+          "REMINDER": 1.6179704681118443
+        },
+        "segment_mean_std": 242.9876175328615
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 14.6
+    },
+    {
+      "name": "Composite_Margin75_Lambda1.0",
+      "parameters": {
+        "name": "Composite_Margin75_Lambda1.0",
+        "margin": 75.0,
+        "conf_gate": 0.0,
+        "lambda": 1.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10177924.980000017,
+        "mean_net_per_case": 2035.584996,
+        "gross_recovery": 10437404.980000013,
+        "action_cost": 253010.0,
+        "friction_cost": 6470.0,
+        "recovery_rate": 0.7386,
+        "unnecessary_intervention_rate": 0.4918600623484586,
+        "action_distribution": {
+          "PAYMENT_LINK": 34.45417578980294,
+          "ESCALATE": 37.67594619956209,
+          "PROMISE_TO_PAY": 16.562402252111355,
+          "STOP": 9.696590553644041,
+          "REMINDER": 1.6108852048795745
+        },
+        "segment_mean_std": 245.84447710386004
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 15.68
+    },
+    {
+      "name": "Composite_Margin100_Lambda1.0",
+      "parameters": {
+        "name": "Composite_Margin100_Lambda1.0",
+        "margin": 100.0,
+        "conf_gate": 0.0,
+        "lambda": 1.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10137178.96000002,
+        "mean_net_per_case": 2027.4357920000002,
+        "gross_recovery": 10386478.960000012,
+        "action_cost": 242710.0,
+        "friction_cost": 6590.0,
+        "recovery_rate": 0.7362,
+        "unnecessary_intervention_rate": 0.49222797927461137,
+        "action_distribution": {
+          "PAYMENT_LINK": 35.06050263729444,
+          "ESCALATE": 35.69655600372324,
+          "PROMISE_TO_PAY": 17.43717033819423,
+          "STOP": 10.176853862860689,
+          "REMINDER": 1.6289171579273967
+        },
+        "segment_mean_std": 251.07040559114597
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 14.54
+    },
+    {
+      "name": "Composite_Margin150_Lambda1.0",
+      "parameters": {
+        "name": "Composite_Margin150_Lambda1.0",
+        "margin": 150.0,
+        "conf_gate": 0.0,
+        "lambda": 1.0
+      },
+      "metrics": {
+        "n_cases": 5000,
+        "total_net": 10141721.680000018,
+        "mean_net_per_case": 2028.3443359999999,
+        "gross_recovery": 10380676.680000009,
+        "action_cost": 232140.0,
+        "friction_cost": 6815.0,
+        "recovery_rate": 0.735,
+        "unnecessary_intervention_rate": 0.4934707903780069,
+        "action_distribution": {
+          "PAYMENT_LINK": 36.42251349267541,
+          "ESCALATE": 33.78565921356977,
+          "PROMISE_TO_PAY": 17.579028527370856,
+          "STOP": 10.254433307632999,
+          "REMINDER": 1.9583654587509638
+        },
+        "segment_mean_std": 258.85766914497947
+      },
+      "is_valid": true,
+      "rejection_reasons": [],
+      "eval_time_sec": 16.13
+    }
+  ]
+}

@@ -1,13 +1,13 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { ThemeMode } from '../types';
 
-interface ThemeContextType {
+export interface ThemeContextType {
   theme: ThemeMode;
   toggleTheme: () => void;
   setTheme: (mode: ThemeMode) => void;
 }
 
-const ThemeContext = createContext<ThemeContextType>({
+export const ThemeContext = createContext<ThemeContextType>({
   theme: 'dark',
   toggleTheme: () => {},
   setTheme: () => {},
@@ -44,5 +44,3 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     </ThemeContext.Provider>
   );
 };
-
-export const useTheme = () => useContext(ThemeContext);

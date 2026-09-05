@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { DataProvider } from './context/DataContext';
+import { ToastProvider } from './context/ToastContext';
 import { Shell } from './components/layout/Shell';
 import { Overview } from './pages/Overview';
 import { Cases } from './pages/Cases';
@@ -8,7 +10,7 @@ import { Evaluation } from './pages/Evaluation';
 import { Safety } from './pages/Safety';
 import { Architecture } from './pages/Architecture';
 
-export const App: React.FC = () => {
+export const AppContent: React.FC = () => {
   const [currentPath, setCurrentPath] = useState<string>(() => {
     const hash = window.location.hash.replace(/^#/, '');
     return hash || '/';
@@ -59,5 +61,15 @@ export const App: React.FC = () => {
     <Shell currentPath={currentPath} onNavigate={navigate}>
       {renderContent()}
     </Shell>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <DataProvider>
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
+    </DataProvider>
   );
 };

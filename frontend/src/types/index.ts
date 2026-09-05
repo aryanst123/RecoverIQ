@@ -121,13 +121,21 @@ export interface BenchmarkArm {
   Gross_Recovered: number;
   Action_Cost: number;
   Friction_Cost: number;
-  Net_Recovered: number;
+  Net_Recovered?: number;
+  Total_Net_Recovered?: number;
   Mean_Net_Per_Case: number;
   Recovery_Rate: number;
   Intervention_Efficiency: number;
   Unnecessary_Intervention_Rate: number;
-  Critical_Safety_Violations: number;
+  Safety_Violations?: number;
+  Critical_Safety_Violations?: number;
   Action_Distribution: Record<string, number>;
+}
+
+export interface BootstrapComparisonItem {
+  point_estimate: number;
+  ci_95: [number, number];
+  classification: string;
 }
 
 export interface BenchmarkResponse {
@@ -141,31 +149,9 @@ export interface BenchmarkResponse {
     RECOVERIQ: BenchmarkArm;
   };
   bootstrap_comparisons: {
-    iterations: number;
-    confidence_level: number;
-    comparisons: {
-      RecoverIQ_vs_Baseline: {
-        point_estimate: number;
-        ci_lower: number;
-        ci_upper: number;
-        p_value: number;
-        classification: string;
-      };
-      RecoverIQ_vs_Control: {
-        point_estimate: number;
-        ci_lower: number;
-        ci_upper: number;
-        p_value: number;
-        classification: string;
-      };
-      Baseline_vs_Control: {
-        point_estimate: number;
-        ci_lower: number;
-        ci_upper: number;
-        p_value: number;
-        classification: string;
-      };
-    };
+    RecoverIQ_vs_Baseline: BootstrapComparisonItem;
+    RecoverIQ_vs_Control: BootstrapComparisonItem;
+    Baseline_vs_Control: BootstrapComparisonItem;
   };
 }
 
@@ -190,24 +176,27 @@ export interface AttributionSensitivity {
 
 export interface LLMAblationResponse {
   ablation_comparison: {
-    dataset_size: number;
-    structured_only_mean_net: number;
-    llm_augmented_mean_net: number;
-    point_estimate_delta: number;
-    ci_lower: number;
-    ci_upper: number;
+    mean_net_structured: number;
+    mean_net_augmented: number;
+    point_estimate: number;
+    ci_95: [number, number];
     classification: string;
-    decisions_changed_count: number;
-    promises_registered_count: number;
-    customer_opt_outs_honored: number;
+    decisions_changed: number;
+    promises_registered: number;
+    opt_outs_honored: number;
     fallback_rate: number;
   };
   extraction_benchmark: {
-    total_samples: number;
+    evaluation_type: string;
+    samples_evaluated: number;
     intent_accuracy: number;
     p2p_detection_accuracy: number;
-    date_normalization_accuracy: number;
-    prompt_injection_success_rate: number;
+    promised_date_accuracy: number;
+    constraint_accuracy: number;
+    adversarial_resilience_rate: number;
+    fallback_rate: number;
+    avg_latency_ms: number;
+    total_tokens_estimated: number;
   };
 }
 

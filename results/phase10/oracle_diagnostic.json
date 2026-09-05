@@ -1,0 +1,45 @@
+{
+  "cohort_size": 1500,
+  "recoveriq_v1": {
+    "diagnostic_type": "SIMULATOR-ONLY ORACLE DIAGNOSTIC",
+    "cohort_size": 1500,
+    "oracle_agreement_rate": 0.244,
+    "mean_regret_per_case": 665.65526,
+    "policy_action_distribution": {
+      "STOP": 0.292,
+      "REMINDER": 0.004666666666666667,
+      "PAYMENT_LINK": 0.08066666666666666,
+      "PROMISE_TO_PAY": 0.10533333333333333,
+      "ESCALATE": 0.5173333333333333
+    },
+    "oracle_action_distribution": {
+      "STOP": 0.6073333333333333,
+      "REMINDER": 0.20466666666666666,
+      "PAYMENT_LINK": 0.09933333333333333,
+      "PROMISE_TO_PAY": 0.058,
+      "ESCALATE": 0.030666666666666665
+    }
+  },
+  "recoveriq_v2": {
+    "diagnostic_type": "SIMULATOR-ONLY ORACLE DIAGNOSTIC",
+    "cohort_size": 1500,
+    "oracle_agreement_rate": 0.086,
+    "mean_regret_per_case": 643.8648866666667,
+    "policy_action_distribution": {
+      "STOP": 0.016666666666666666,
+      "REMINDER": 0.014,
+      "PAYMENT_LINK": 0.27,
+      "PROMISE_TO_PAY": 0.19733333333333333,
+      "ESCALATE": 0.502
+    },
+    "oracle_action_distribution": {
+      "STOP": 0.6073333333333333,
+      "REMINDER": 0.20466666666666666,
+      "PAYMENT_LINK": 0.09933333333333333,
+      "PROMISE_TO_PAY": 0.058,
+      "ESCALATE": 0.030666666666666665
+    }
+  },
+  "regret_reduction_per_case": 21.790373333333264,
+  "agreement_improvement": -0.158
+}

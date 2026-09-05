@@ -1,0 +1,106 @@
+{
+  "by_customer_segment": {
+    "NEW": {
+      "sample_size": 617,
+      "mean_net_control": 1243.2455128205127,
+      "mean_net_baseline": 2616.2797697368424,
+      "mean_net_recoveriq_v1": 1959.3000000000002,
+      "mean_net_recoveriq_v2": 1824.9681685575363
+    },
+    "STANDARD": {
+      "sample_size": 2353,
+      "mean_net_control": 1392.6203242105266,
+      "mean_net_baseline": 2357.935866943867,
+      "mean_net_recoveriq_v1": 2035.9982888146913,
+      "mean_net_recoveriq_v2": 2016.0381172970674
+    },
+    "AT_RISK": {
+      "sample_size": 442,
+      "mean_net_control": 867.462358974359,
+      "mean_net_baseline": 1918.6732663316582,
+      "mean_net_recoveriq_v1": 1640.1907635467978,
+      "mean_net_recoveriq_v2": 1319.6226018099546
+    },
+    "VIP": {
+      "sample_size": 588,
+      "mean_net_control": 1906.0096563011455,
+      "mean_net_baseline": 2962.813650254669,
+      "mean_net_recoveriq_v1": 2429.5724311183144,
+      "mean_net_recoveriq_v2": 2623.433843537415
+    }
+  },
+  "by_amount_bucket": {
+    "1,000 - 3,000": {
+      "sample_size": 1859,
+      "mean_net_control": 976.7114565105508,
+      "mean_net_baseline": 1551.0641191983125,
+      "mean_net_recoveriq_v1": 1289.105132743363,
+      "mean_net_recoveriq_v2": 1274.8244271113501
+    },
+    "3,000 - 10,000": {
+      "sample_size": 1154,
+      "mean_net_control": 2323.59691136974,
+      "mean_net_baseline": 4207.327,
+      "mean_net_recoveriq_v1": 3611.389348561759,
+      "mean_net_recoveriq_v2": 3576.6839514731373
+    },
+    "< 1,000": {
+      "sample_size": 869,
+      "mean_net_control": 346.68241877256315,
+      "mean_net_baseline": 525.2898079231693,
+      "mean_net_recoveriq_v1": 366.6175974842767,
+      "mean_net_recoveriq_v2": 432.58119677790563
+    },
+    ">= 10,000": {
+      "sample_size": 118,
+      "mean_net_control": 7383.8485321100925,
+      "mean_net_baseline": 12838.45479338843,
+      "mean_net_recoveriq_v1": 11226.222352941177,
+      "mean_net_recoveriq_v2": 9510.935508474577
+    }
+  },
+  "by_failure_code": {
+    "AUTHENTICATION_FAILED": {
+      "sample_size": 1419,
+      "mean_net_control": 1530.9027460770328,
+      "mean_net_baseline": 2797.954530551416,
+      "mean_net_recoveriq_v1": 2229.3057737682166,
+      "mean_net_recoveriq_v2": 2152.3178928823118
+    },
+    "NETWORK_TIMEOUT": {
+      "sample_size": 409,
+      "mean_net_control": 1960.2650757575757,
+      "mean_net_baseline": 2699.4581481481478,
+      "mean_net_recoveriq_v1": 2474.6192897727274,
+      "mean_net_recoveriq_v2": 2470.5876039119808
+    },
+    "INSUFFICIENT_FUNDS": {
+      "sample_size": 1184,
+      "mean_net_control": 954.1417246963565,
+      "mean_net_baseline": 1905.4421039805036,
+      "mean_net_recoveriq_v1": 1679.6404541701074,
+      "mean_net_recoveriq_v2": 1646.8216722972975
+    },
+    "CARD_EXPIRED": {
+      "sample_size": 202,
+      "mean_net_control": 329.6771038251366,
+      "mean_net_baseline": 1578.659189189189,
+      "mean_net_recoveriq_v1": 983.8486363636364,
+      "mean_net_recoveriq_v2": 756.9300495049505
+    },
+    "GATEWAY_DOWNTIME": {
+      "sample_size": 562,
+      "mean_net_control": 2001.6131379310348,
+      "mean_net_baseline": 2812.803369397218,
+      "mean_net_recoveriq_v1": 2418.9552427184462,
+      "mean_net_recoveriq_v2": 2433.6719217081854
+    },
+    "USER_DROPPED": {
+      "sample_size": 224,
+      "mean_net_control": 1293.71818627451,
+      "mean_net_baseline": 2661.486388888889,
+      "mean_net_recoveriq_v1": 2079.5126111111113,
+      "mean_net_recoveriq_v2": 2055.9177232142856
+    }
+  }
+}
