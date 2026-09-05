@@ -1,0 +1,244 @@
+{
+  "evaluation_metadata": {
+    "phase": "Phase 12",
+    "date": "2026-09-05T09:20:13.609657+00:00",
+    "evaluation_seed": 444555666,
+    "dataset_size": 20000,
+    "scenario": "S1_HIGH_NATURAL_RECOVERY",
+    "bootstrap_iterations": 2000,
+    "confidence_level": 0.95,
+    "duration_seconds": 745.63
+  },
+  "financial_benchmark": {
+    "CONTROL": {
+      "cases": 3334,
+      "mean_net_recovery": 1460.5,
+      "mean_gross_recovery": 1460.5,
+      "mean_action_cost": 0.0,
+      "mean_friction_cost": 0.0,
+      "total_mean_cost": 0.0,
+      "recovery_rate_pct": 51.77,
+      "efficiency_ratio": 0.0,
+      "unnecessary_interventions_pct": 0.0,
+      "mean_regret_vs_oracle": 1254.46,
+      "action_counts": {
+        "STOP": 3334
+      },
+      "action_percentages": {
+        "STOP": 100.0
+      }
+    },
+    "BASELINE": {
+      "cases": 3334,
+      "mean_net_recovery": 2445.3,
+      "mean_gross_recovery": 2459.56,
+      "mean_action_cost": 11.76,
+      "mean_friction_cost": 2.5,
+      "total_mean_cost": 14.25,
+      "recovery_rate_pct": 83.32,
+      "efficiency_ratio": 172.59,
+      "unnecessary_interventions_pct": 67.55,
+      "mean_regret_vs_oracle": 269.65,
+      "action_counts": {
+        "REMINDER": 2134,
+        "PAYMENT_LINK": 1103,
+        "PROMISE_TO_PAY": 1023,
+        "STOP": 522,
+        "ESCALATE": 265
+      },
+      "action_percentages": {
+        "REMINDER": 42.3,
+        "PAYMENT_LINK": 21.9,
+        "PROMISE_TO_PAY": 20.3,
+        "STOP": 10.3,
+        "ESCALATE": 5.3
+      }
+    },
+    "RECOVERIQ_V1": {
+      "cases": 3333,
+      "mean_net_recovery": 2056.03,
+      "mean_gross_recovery": 2110.8,
+      "mean_action_cost": 54.2,
+      "mean_friction_cost": 0.57,
+      "total_mean_cost": 54.76,
+      "recovery_rate_pct": 69.82,
+      "efficiency_ratio": 38.54,
+      "unnecessary_interventions_pct": 37.2,
+      "mean_regret_vs_oracle": 658.92,
+      "action_counts": {
+        "STOP": 1150,
+        "PROMISE_TO_PAY": 293,
+        "ESCALATE": 1776,
+        "PAYMENT_LINK": 504,
+        "REMINDER": 32
+      },
+      "action_percentages": {
+        "STOP": 30.6,
+        "PROMISE_TO_PAY": 7.8,
+        "ESCALATE": 47.3,
+        "PAYMENT_LINK": 13.4,
+        "REMINDER": 0.9
+      }
+    },
+    "RECOVERIQ_V2": {
+      "cases": 3333,
+      "mean_net_recovery": 2044.25,
+      "mean_gross_recovery": 2098.89,
+      "mean_action_cost": 53.16,
+      "mean_friction_cost": 1.49,
+      "total_mean_cost": 54.65,
+      "recovery_rate_pct": 73.06,
+      "efficiency_ratio": 38.41,
+      "unnecessary_interventions_pct": 60.52,
+      "mean_regret_vs_oracle": 670.71,
+      "action_counts": {
+        "PAYMENT_LINK": 1502,
+        "ESCALATE": 1693,
+        "PROMISE_TO_PAY": 643,
+        "STOP": 413,
+        "REMINDER": 76
+      },
+      "action_percentages": {
+        "PAYMENT_LINK": 34.7,
+        "ESCALATE": 39.1,
+        "PROMISE_TO_PAY": 14.9,
+        "STOP": 9.5,
+        "REMINDER": 1.8
+      }
+    },
+    "RECOVERIQ_V3": {
+      "cases": 3333,
+      "mean_net_recovery": 2250.56,
+      "mean_gross_recovery": 2269.93,
+      "mean_action_cost": 16.28,
+      "mean_friction_cost": 3.1,
+      "total_mean_cost": 19.37,
+      "recovery_rate_pct": 77.11,
+      "efficiency_ratio": 117.16,
+      "unnecessary_interventions_pct": 67.42,
+      "mean_regret_vs_oracle": 464.4,
+      "action_counts": {
+        "PROMISE_TO_PAY": 1262,
+        "STOP": 656,
+        "PAYMENT_LINK": 1625,
+        "REMINDER": 1334,
+        "ESCALATE": 404
+      },
+      "action_percentages": {
+        "PROMISE_TO_PAY": 23.9,
+        "STOP": 12.4,
+        "PAYMENT_LINK": 30.8,
+        "REMINDER": 25.3,
+        "ESCALATE": 7.7
+      }
+    },
+    "RECOVERIQ_V4": {
+      "cases": 3333,
+      "mean_net_recovery": 2216.42,
+      "mean_gross_recovery": 2238.18,
+      "mean_action_cost": 18.35,
+      "mean_friction_cost": 3.41,
+      "total_mean_cost": 21.76,
+      "recovery_rate_pct": 76.33,
+      "efficiency_ratio": 102.86,
+      "unnecessary_interventions_pct": 73.09,
+      "mean_regret_vs_oracle": 498.53,
+      "action_counts": {
+        "PAYMENT_LINK": 2669,
+        "REMINDER": 598,
+        "PROMISE_TO_PAY": 1054,
+        "STOP": 569,
+        "ESCALATE": 467
+      },
+      "action_percentages": {
+        "PAYMENT_LINK": 49.8,
+        "REMINDER": 11.2,
+        "PROMISE_TO_PAY": 19.7,
+        "STOP": 10.6,
+        "ESCALATE": 8.7
+      }
+    }
+  },
+  "bootstrap_hypothesis_testing": {
+    "RECOVERIQ_V4_vs_BASELINE": {
+      "mean_diff": -228.88,
+      "ci_lower": -369.49,
+      "ci_upper": -98.01,
+      "claim_classification": "STATISTICALLY_SIGNIFICANT_NEGATIVE",
+      "is_statistically_significant": true,
+      "confidence_level": 0.95
+    },
+    "RECOVERIQ_V4_vs_RECOVERIQ_V3": {
+      "mean_diff": -34.13,
+      "ci_lower": -166.86,
+      "ci_upper": 98.8,
+      "claim_classification": "INCONCLUSIVE",
+      "is_statistically_significant": false,
+      "confidence_level": 0.95
+    },
+    "RECOVERIQ_V4_vs_CONTROL": {
+      "mean_diff": 755.93,
+      "ci_lower": 642.52,
+      "ci_upper": 873.73,
+      "claim_classification": "STATISTICALLY_SIGNIFICANT_POSITIVE",
+      "is_statistically_significant": true,
+      "confidence_level": 0.95
+    },
+    "RECOVERIQ_V3_vs_BASELINE": {
+      "mean_diff": -194.75,
+      "ci_lower": -327.81,
+      "ci_upper": -58.53,
+      "claim_classification": "STATISTICALLY_SIGNIFICANT_NEGATIVE",
+      "is_statistically_significant": true,
+      "confidence_level": 0.95
+    },
+    "RECOVERIQ_V3_vs_RECOVERIQ_V1": {
+      "mean_diff": 194.52,
+      "ci_lower": 58.74,
+      "ci_upper": 331.35,
+      "claim_classification": "STATISTICALLY_SIGNIFICANT_POSITIVE",
+      "is_statistically_significant": true,
+      "confidence_level": 0.95
+    },
+    "BASELINE_vs_CONTROL": {
+      "mean_diff": 984.81,
+      "ci_lower": 856.14,
+      "ci_upper": 1108.71,
+      "claim_classification": "STATISTICALLY_SIGNIFICANT_POSITIVE",
+      "is_statistically_significant": true,
+      "confidence_level": 0.95
+    }
+  },
+  "stress_test_benchmarks": {
+    "S2_LOW_NATURAL_RECOVERY": {
+      "CONTROL_mean_net": 307.12,
+      "BASELINE_mean_net": 1472.99,
+      "RECOVERIQ_V4_mean_net": 1275.74,
+      "V4_vs_Baseline_diff": -197.25
+    },
+    "S3_WEAK_INTERVENTION_EFFECT": {
+      "CONTROL_mean_net": 699.44,
+      "BASELINE_mean_net": 1344.54,
+      "RECOVERIQ_V4_mean_net": 1143.26,
+      "V4_vs_Baseline_diff": -201.27
+    },
+    "S4_STRONG_INTERVENTION_EFFECT": {
+      "CONTROL_mean_net": 762.43,
+      "BASELINE_mean_net": 2385.31,
+      "RECOVERIQ_V4_mean_net": 2289.38,
+      "V4_vs_Baseline_diff": -95.93
+    },
+    "S5_HIGH_RECOVERY_HETEROGENEITY": {
+      "CONTROL_mean_net": 908.36,
+      "BASELINE_mean_net": 1830.73,
+      "RECOVERIQ_V4_mean_net": 1664.24,
+      "V4_vs_Baseline_diff": -166.5
+    },
+    "S6_HIGH_EVENT_FAILURE_RATE": {
+      "CONTROL_mean_net": 611.64,
+      "BASELINE_mean_net": 1255.58,
+      "RECOVERIQ_V4_mean_net": 1178.15,
+      "V4_vs_Baseline_diff": -77.43
+    }
+  }
+}

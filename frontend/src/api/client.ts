@@ -106,10 +106,12 @@ export const api = {
 
   // Razorpay Integration & Webhooks
   getRazorpayStatus: () => fetchJson<RazorpayStatus>('/razorpay/status'),
-  simulateWebhook: (event: string, payload: any, signature?: string) =>
-    fetchJson<any>('/webhooks/razorpay', {
+  simulateWebhook: (event: string, payload: any, signature?: string) => {
+    const body = (payload && payload.event && payload.payload) ? payload : { event, payload };
+    return fetchJson<any>('/webhooks/razorpay', {
       method: 'POST',
       headers: signature ? { 'x-razorpay-signature': signature } : {},
-      body: JSON.stringify({ event, payload }),
-    }),
+      body: JSON.stringify(body),
+    });
+  },
 };

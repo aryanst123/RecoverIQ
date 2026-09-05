@@ -1,0 +1,10 @@
+{
+  "sample_size": 10000,
+  "stage0_payment_link_rate": 0.5767,
+  "stage1_payment_link_after_reminder_failure_rate": 0.46,
+  "link_conditional_difference": -0.1167,
+  "stage0_reminder_rate": 0.5513,
+  "stage1_reminder_after_link_failure_rate": 0.4276,
+  "reminder_conditional_difference": -0.1237,
+  "key_mechanism_finding": "Conditional response rates at Stage 1 given Stage 0 failure differ from unconditioned Stage 0 marginals. Specifically, debtors who failed Stage 0 Reminder have a higher residual propensity for Payment Link than debtors who failed Payment Link have for Reminder. Conditioning on stage index and prior action is critical for accurate downstream continuation-value evaluation."
+}

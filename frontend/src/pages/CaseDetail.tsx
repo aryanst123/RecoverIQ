@@ -127,7 +127,8 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseId, onNavigate }) =>
         },
       },
     };
-    api.simulateWebhook('payment.captured', mockPayload)
+    // Use test-simulation signature to bypass HMAC verification in test mode
+    api.simulateWebhook('payment.captured', mockPayload, 'test-simulation')
       .then(() => {
         showToast('Payment reconciled: Case state updated to RECOVERED', 'success');
         loadCase();
@@ -191,6 +192,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseId, onNavigate }) =>
   const isTerminal = c.current_state === 'RECOVERED' || c.current_state === 'STOPPED';
   const recommendedAction = decision_trace.recommended?.selected_action || 'STOP';
   const confidence = decision_trace.recommended?.confidence || 0;
+  const isDemoCase = c.case_id.includes('DEMO');
 
   const pipelineStages = [
     { label: 'Payment failed', desc: `${formatCurrency(c.amount_due)}`, status: 'DONE' },
@@ -222,6 +224,11 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseId, onNavigate }) =>
               <span className="text-xs px-2 py-0.5 rounded font-semibold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200/60 dark:border-rose-900/40">
                 PAYMENT FAILED
               </span>
+              {isDemoCase && (
+                <span className="text-xs px-2 py-0.5 rounded font-bold bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/40">
+                  DEMO - Manual Override
+                </span>
+              )}
               <span className="text-sm text-slate-400">·</span>
               <span className="text-sm font-medium text-slate-700 dark:text-[#A3A3A3]">
                 {formatFailureCode(latest_attempt?.failure_code || 'GATEWAY_ERROR')}
@@ -318,7 +325,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseId, onNavigate }) =>
           </div>
 
           <div className="flex items-center gap-2.5">
-            {!isTerminal && (
+            {!isTerminal && !payment_link && (
               <>
                 <button
                   onClick={() => handleExecuteAction(recommendedAction)}
@@ -338,6 +345,17 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseId, onNavigate }) =>
                   Review / Override
                 </button>
               </>
+            )}
+            {!isTerminal && payment_link && (
+              <button
+                onClick={() => {
+                  setSelectedOverrideAction(recommendedAction);
+                  setShowOverrideModal(true);
+                }}
+                className="px-3 py-1.5 rounded-md border border-slate-200 dark:border-[#222] bg-slate-50 dark:bg-[#141414] hover:bg-slate-100 dark:hover:bg-[#1C1C1C] text-slate-700 dark:text-[#D4D4D4] font-medium text-xs transition-colors cursor-pointer"
+              >
+                Review / Override
+              </button>
             )}
           </div>
         </div>
@@ -517,11 +535,20 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseId, onNavigate }) =>
 
               {/* Customer NLP Message Workspace */}
               <div className="space-y-3 pt-3 border-t border-slate-100 dark:border-[#1F1F1F]">
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-[#737373]">
-                  Customer Message NLP Context
+                <div className="space-y-1">
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-[#737373]">
+                    Customer Message Context Extraction (Demo)
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-[#A3A3A3]">
+                    Customer message → Bounded NLP extraction → Structured context → Policy uses context to decide action.
+                    <strong className="text-slate-700 dark:text-[#D4D4D4]"> The LLM does NOT choose the financial action.</strong>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
+                    <label className="text-xs text-slate-600 dark:text-[#A3A3A3] font-medium">
+                      Test Customer Message:
+                    </label>
                     <textarea
                       rows={2}
                       placeholder="e.g. 'I will pay tomorrow by 5 PM...'"
@@ -535,30 +562,40 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({ caseId, onNavigate }) =>
                       className="px-3 py-1.5 rounded-md bg-slate-900 dark:bg-blue-600 text-white font-medium text-xs hover:bg-slate-800 dark:hover:bg-blue-700 transition-colors flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
-                      Extract Intent
+                      Extract Structured Context
                     </button>
                   </div>
 
                   {extractionResult ? (
-                    <div className="p-3 rounded-md border border-slate-200 dark:border-[#1F1F1F] bg-slate-50 dark:bg-[#0A0A0A] text-xs space-y-1">
-                      <div className="flex justify-between">
-                        <span className="text-slate-400">Intent:</span>
-                        <span className="font-semibold text-slate-900 dark:text-white">{extractionResult.intent}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-400">Promise to Pay:</span>
-                        <span className={extractionResult.has_promise ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-slate-400'}>
-                          {extractionResult.has_promise ? 'Yes' : 'No'}
-                        </span>
-                      </div>
-                      {extractionResult.promised_date && (
+                    <div className="space-y-2">
+                      <label className="text-xs text-slate-600 dark:text-[#A3A3A3] font-medium">
+                        Extracted Structured Context:
+                      </label>
+                      <div className="p-3 rounded-md border border-slate-200 dark:border-[#1F1F1F] bg-slate-50 dark:bg-[#0A0A0A] text-xs space-y-1">
                         <div className="flex justify-between">
-                          <span className="text-slate-400">Promised Date:</span>
-                          <span className="text-blue-600 dark:text-blue-400 font-medium">{extractionResult.promised_date}</span>
+                          <span className="text-slate-400">Intent:</span>
+                          <span className="font-semibold text-slate-900 dark:text-white">{extractionResult.intent}</span>
                         </div>
-                      )}
-                      <div className="pt-1 border-t border-slate-200 dark:border-[#1F1F1F] text-[11px] text-emerald-600 dark:text-emerald-400">
-                        Policy Effect: {extractionResult.policy_effect.outreach_paused ? 'Outreach paused until promised date' : 'Standard flow'}
+                        <div className="flex justify-between">
+                          <span className="text-slate-400">Promise to Pay:</span>
+                          <span className={extractionResult.has_promise ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-slate-400'}>
+                            {extractionResult.has_promise ? 'Yes' : 'No'}
+                          </span>
+                        </div>
+                        {extractionResult.promised_date && (
+                          <div className="flex justify-between">
+                            <span className="text-slate-400">Promised Date:</span>
+                            <span className="text-blue-600 dark:text-blue-400 font-medium">{extractionResult.promised_date}</span>
+                          </div>
+                        )}
+                        <div className="pt-1 border-t border-slate-200 dark:border-[#1F1F1F] text-[11px]">
+                          <span className="text-slate-500">Policy Effect: </span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-medium">
+                            {extractionResult.policy_effect.outreach_paused
+                              ? `Outreach paused until ${extractionResult.promised_date}. Payment expected by then.`
+                              : 'Standard recovery flow continues'}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   ) : (

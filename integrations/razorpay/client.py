@@ -194,6 +194,20 @@ class MockRazorpayGateway(RazorpayClientInterface):
             return True
         return False
 
+    def set_payment_status(self, payment_id: str, status: str):
+        """Test helper: Directly set payment status for failure injection scenarios."""
+        if payment_id in self.payments:
+            self.payments[payment_id]["status"] = status
+        else:
+            # Create a payment record if it doesn't exist
+            self.payments[payment_id] = {
+                "id": payment_id,
+                "amount": 100000,  # Default amount
+                "currency": "INR",
+                "status": status,
+                "created_at": int(datetime.now(timezone.utc).timestamp()),
+            }
+
 class RazorpayTestClient(RazorpayClientInterface):
     """
     LIVE RAZORPAY TEST-MODE CLIENT.

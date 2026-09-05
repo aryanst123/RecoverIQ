@@ -273,9 +273,6 @@ export const Overview: React.FC<OverviewProps> = ({ onNavigate }) => {
                 </div>
               </div>
 
-              <p className="text-xs text-slate-500 dark:text-[#A3A3A3] pt-0.5 leading-relaxed">
-                RecoverIQ beat zero outreach, but underperformed the deterministic baseline due to over-escalation.
-              </p>
             </div>
           ) : null}
         </div>

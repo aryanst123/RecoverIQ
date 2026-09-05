@@ -1,0 +1,324 @@
+{
+  "total_cases": 5000,
+  "baseline_mean_net": 2375.36,
+  "v3_mean_net": 1386.54,
+  "net_difference": -988.82,
+  "concordance": {
+    "baseline_recovered_v3_failed_count": 1692,
+    "v3_recovered_baseline_failed_count": 16,
+    "both_recovered_count": 2489,
+    "both_failed_count": 803
+  },
+  "by_amount_bucket": {
+    "1,000 - 3,000": {
+      "baseline_mean": 1541.68,
+      "v3_mean": 906.29,
+      "diff": -635.39
+    },
+    "3,000 - 10,000": {
+      "baseline_mean": 4100.45,
+      "v3_mean": 2407.37,
+      "diff": -1693.07
+    },
+    "< 1,000": {
+      "baseline_mean": 534.37,
+      "v3_mean": 350.2,
+      "diff": -184.18
+    },
+    ">= 10,000": {
+      "baseline_mean": 12236.45,
+      "v3_mean": 6609.19,
+      "diff": -5627.25
+    }
+  },
+  "by_customer_segment": {
+    "AT_RISK": {
+      "baseline_mean": 2118.58,
+      "v3_mean": 807.68,
+      "diff": -1310.9
+    },
+    "NEW": {
+      "baseline_mean": 2309.37,
+      "v3_mean": 1199.51,
+      "diff": -1109.86
+    },
+    "STANDARD": {
+      "baseline_mean": 2411.14,
+      "v3_mean": 1418.07,
+      "diff": -993.07
+    },
+    "VIP": {
+      "baseline_mean": 2460.39,
+      "v3_mean": 1817.77,
+      "diff": -642.62
+    }
+  },
+  "by_failure_code": {
+    "AUTHENTICATION_FAILED": {
+      "baseline_mean": 2679.75,
+      "v3_mean": 1472.16,
+      "diff": -1207.6
+    },
+    "CARD_EXPIRED": {
+      "baseline_mean": 1578.57,
+      "v3_mean": 361.71,
+      "diff": -1216.86
+    },
+    "GATEWAY_DOWNTIME": {
+      "baseline_mean": 2817.54,
+      "v3_mean": 2001.25,
+      "diff": -816.29
+    },
+    "INSUFFICIENT_FUNDS": {
+      "baseline_mean": 1706.62,
+      "v3_mean": 963.58,
+      "diff": -743.04
+    },
+    "NETWORK_TIMEOUT": {
+      "baseline_mean": 2971.49,
+      "v3_mean": 1947.18,
+      "diff": -1024.31
+    },
+    "USER_DROPPED": {
+      "baseline_mean": 2465.14,
+      "v3_mean": 1274.08,
+      "diff": -1191.07
+    }
+  },
+  "first_action_pair_counts": {
+    "B_REMINDER__V3_STOP": 3060,
+    "B_PROMISE_TO_PAY__V3_PROMISE_TO_PAY": 508,
+    "B_PROMISE_TO_PAY__V3_STOP": 954,
+    "B_PAYMENT_LINK__V3_PAYMENT_LINK": 97,
+    "B_STOP__V3_STOP": 89,
+    "B_PAYMENT_LINK__V3_STOP": 119,
+    "B_REMINDER__V3_PROMISE_TO_PAY": 26,
+    "B_REMINDER__V3_REMINDER": 81,
+    "B_PAYMENT_LINK__V3_REMINDER": 15,
+    "B_REMINDER__V3_PAYMENT_LINK": 51
+  },
+  "representative_cases_baseline_wins": [
+    {
+      "case_id": "case_000001",
+      "amount": 331.21,
+      "segment": "STANDARD",
+      "failure_code": "GATEWAY_DOWNTIME",
+      "baseline_actions": [
+        "REMINDER"
+      ],
+      "baseline_net": 329.21,
+      "baseline_recovered": true,
+      "v3_actions": [
+        "STOP"
+      ],
+      "v3_net": 0.0,
+      "v3_recovered": false,
+      "hidden_control": false,
+      "hidden_reminder": true,
+      "hidden_link": true,
+      "hidden_ptp": true,
+      "hidden_escalate": true
+    },
+    {
+      "case_id": "case_000002",
+      "amount": 3230.05,
+      "segment": "VIP",
+      "failure_code": "AUTHENTICATION_FAILED",
+      "baseline_actions": [
+        "REMINDER"
+      ],
+      "baseline_net": 3228.05,
+      "baseline_recovered": true,
+      "v3_actions": [
+        "STOP"
+      ],
+      "v3_net": 0.0,
+      "v3_recovered": false,
+      "hidden_control": false,
+      "hidden_reminder": true,
+      "hidden_link": true,
+      "hidden_ptp": true,
+      "hidden_escalate": true
+    },
+    {
+      "case_id": "case_000009",
+      "amount": 1055.61,
+      "segment": "VIP",
+      "failure_code": "INSUFFICIENT_FUNDS",
+      "baseline_actions": [
+        "PROMISE_TO_PAY"
+      ],
+      "baseline_net": 1050.61,
+      "baseline_recovered": true,
+      "v3_actions": [
+        "STOP"
+      ],
+      "v3_net": 0.0,
+      "v3_recovered": false,
+      "hidden_control": false,
+      "hidden_reminder": true,
+      "hidden_link": true,
+      "hidden_ptp": true,
+      "hidden_escalate": true
+    },
+    {
+      "case_id": "case_000012",
+      "amount": 1136.67,
+      "segment": "VIP",
+      "failure_code": "USER_DROPPED",
+      "baseline_actions": [
+        "REMINDER"
+      ],
+      "baseline_net": 1134.67,
+      "baseline_recovered": true,
+      "v3_actions": [
+        "STOP"
+      ],
+      "v3_net": 0.0,
+      "v3_recovered": false,
+      "hidden_control": false,
+      "hidden_reminder": true,
+      "hidden_link": true,
+      "hidden_ptp": true,
+      "hidden_escalate": true
+    },
+    {
+      "case_id": "case_000013",
+      "amount": 493.63,
+      "segment": "NEW",
+      "failure_code": "INSUFFICIENT_FUNDS",
+      "baseline_actions": [
+        "PROMISE_TO_PAY"
+      ],
+      "baseline_net": 488.63,
+      "baseline_recovered": true,
+      "v3_actions": [
+        "STOP"
+      ],
+      "v3_net": 0.0,
+      "v3_recovered": false,
+      "hidden_control": false,
+      "hidden_reminder": false,
+      "hidden_link": true,
+      "hidden_ptp": true,
+      "hidden_escalate": true
+    }
+  ],
+  "representative_cases_v3_wins": [
+    {
+      "case_id": "case_000021",
+      "amount": 4733.27,
+      "segment": "STANDARD",
+      "failure_code": "AUTHENTICATION_FAILED",
+      "baseline_actions": [
+        "REMINDER",
+        "PAYMENT_LINK",
+        "ESCALATE"
+      ],
+      "baseline_net": -120.0,
+      "baseline_recovered": false,
+      "v3_actions": [
+        "PROMISE_TO_PAY"
+      ],
+      "v3_net": 4728.27,
+      "v3_recovered": true,
+      "hidden_control": true,
+      "hidden_reminder": false,
+      "hidden_link": false,
+      "hidden_ptp": true,
+      "hidden_escalate": false
+    },
+    {
+      "case_id": "case_000314",
+      "amount": 3246.64,
+      "segment": "STANDARD",
+      "failure_code": "AUTHENTICATION_FAILED",
+      "baseline_actions": [
+        "REMINDER",
+        "PAYMENT_LINK",
+        "ESCALATE"
+      ],
+      "baseline_net": -120.0,
+      "baseline_recovered": false,
+      "v3_actions": [
+        "PROMISE_TO_PAY"
+      ],
+      "v3_net": 3241.64,
+      "v3_recovered": true,
+      "hidden_control": true,
+      "hidden_reminder": false,
+      "hidden_link": false,
+      "hidden_ptp": true,
+      "hidden_escalate": false
+    },
+    {
+      "case_id": "case_000602",
+      "amount": 16864.64,
+      "segment": "STANDARD",
+      "failure_code": "AUTHENTICATION_FAILED",
+      "baseline_actions": [
+        "REMINDER",
+        "PAYMENT_LINK",
+        "ESCALATE"
+      ],
+      "baseline_net": -120.0,
+      "baseline_recovered": false,
+      "v3_actions": [
+        "PROMISE_TO_PAY"
+      ],
+      "v3_net": 16859.64,
+      "v3_recovered": true,
+      "hidden_control": false,
+      "hidden_reminder": false,
+      "hidden_link": false,
+      "hidden_ptp": true,
+      "hidden_escalate": false
+    },
+    {
+      "case_id": "case_001220",
+      "amount": 8313.18,
+      "segment": "STANDARD",
+      "failure_code": "USER_DROPPED",
+      "baseline_actions": [
+        "REMINDER",
+        "PAYMENT_LINK",
+        "ESCALATE"
+      ],
+      "baseline_net": -120.0,
+      "baseline_recovered": false,
+      "v3_actions": [
+        "PROMISE_TO_PAY"
+      ],
+      "v3_net": 8308.18,
+      "v3_recovered": true,
+      "hidden_control": false,
+      "hidden_reminder": false,
+      "hidden_link": false,
+      "hidden_ptp": true,
+      "hidden_escalate": false
+    },
+    {
+      "case_id": "case_001974",
+      "amount": 5279.82,
+      "segment": "VIP",
+      "failure_code": "CARD_EXPIRED",
+      "baseline_actions": [
+        "PAYMENT_LINK",
+        "PAYMENT_LINK",
+        "ESCALATE"
+      ],
+      "baseline_net": -121.0,
+      "baseline_recovered": false,
+      "v3_actions": [
+        "REMINDER"
+      ],
+      "v3_net": 5277.82,
+      "v3_recovered": true,
+      "hidden_control": false,
+      "hidden_reminder": true,
+      "hidden_link": false,
+      "hidden_ptp": false,
+      "hidden_escalate": false
+    }
+  ]
+}

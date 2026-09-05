@@ -41,11 +41,11 @@ export const PromiseToPay: React.FC = () => {
   };
 
   const stateMachineSteps = [
-    { key: 'NONE', label: 'NONE', desc: 'No promise' },
-    { key: 'REQUESTED', label: 'REQUESTED', desc: 'Outreach link sent' },
-    { key: 'PROMISED', label: 'PROMISED', desc: 'Date committed' },
-    { key: 'ACTIVE', label: 'ACTIVE', desc: 'Outreach paused' },
-    { key: 'DUE', label: 'DUE', desc: 'Timestamp reached' },
+    { key: 'NONE', label: 'No Promise', desc: 'Standard flow' },
+    { key: 'REQUESTED', label: 'Link Sent', desc: 'Awaiting response' },
+    { key: 'PROMISED', label: 'Committed', desc: 'Customer promised date' },
+    { key: 'ACTIVE', label: 'Awaiting Payment', desc: 'Outreach paused' },
+    { key: 'DUE', label: 'Promise Due', desc: 'Date reached' },
   ];
 
   return (
@@ -54,14 +54,14 @@ export const PromiseToPay: React.FC = () => {
       <div className="pb-5 border-b border-slate-200/80 dark:border-[#1F1F1F]">
         <div className="flex flex-wrap items-baseline gap-3">
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Promise to Pay Intelligence
+            Promise-to-Pay Tracking
           </h1>
           <span className="text-xs px-2.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 font-semibold border border-blue-200/60 dark:border-blue-900/40">
-            Payment State Machine
+            Customer Commitment Workflow
           </span>
         </div>
         <p className="text-xs text-slate-500 dark:text-[#A3A3A3] mt-1">
-          Structured NLP context extraction with deterministic state lifecycle management.
+          Track customer payment commitments: "I'll pay tomorrow by 5 PM." Outreach pauses until promise date, then resumes if missed.
         </p>
       </div>
 
@@ -123,10 +123,10 @@ export const PromiseToPay: React.FC = () => {
           >
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-              <span className="font-semibold text-slate-900 dark:text-white">Terminal: PAID</span>
+              <span className="font-semibold text-slate-900 dark:text-white">Promise Fulfilled</span>
             </div>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400">
-              Settled
+              Payment Received
             </span>
           </div>
 
@@ -140,10 +140,10 @@ export const PromiseToPay: React.FC = () => {
           >
             <div className="flex items-center gap-2">
               <AlertCircle className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-              <span className="font-semibold text-slate-900 dark:text-white">Terminal: BROKEN</span>
+              <span className="font-semibold text-slate-900 dark:text-white">Promise Missed</span>
             </div>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400">
-              Resumes Outreach
+              Recovery Resumes
             </span>
           </div>
         </div>

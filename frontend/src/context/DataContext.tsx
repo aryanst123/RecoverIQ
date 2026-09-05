@@ -49,6 +49,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // In-flight request deduplication refs
   const inFlightBenchmark = useRef<Promise<void> | null>(null);
   const inFlightEvaluation = useRef<Promise<void> | null>(null);
+  const inFlightCases = useRef<Map<string, Promise<void>>>(new Map());
 
   const refreshKPIs = useCallback(async () => {
     setKpis((prev) => ({ ...prev, loading: prev.data === null, error: null }));
@@ -79,13 +80,23 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const refreshCases = useCallback(async (params?: any) => {
+    const key = JSON.stringify(params || { limit: 100 });
+    const existing = inFlightCases.current.get(key);
+    if (existing) return existing;
+
     setCases((prev) => ({ ...prev, loading: prev.data === null, error: null }));
-    try {
-      const data = await api.getCases(params || { limit: 100 });
-      setCases({ data, loading: false, error: null });
-    } catch (err: any) {
-      setCases((prev) => ({ ...prev, loading: false, error: err.message || 'Failed to load cases queue' }));
-    }
+    const p = (async () => {
+      try {
+        const data = await api.getCases(params || { limit: 100 });
+        setCases({ data, loading: false, error: null });
+      } catch (err: any) {
+        setCases((prev) => ({ ...prev, loading: false, error: err.message || 'Failed to load cases queue' }));
+      } finally {
+        inFlightCases.current.delete(key);
+      }
+    })();
+    inFlightCases.current.set(key, p);
+    return p;
   }, []);
 
   const refreshRazorpayStatus = useCallback(async () => {

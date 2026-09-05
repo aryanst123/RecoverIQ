@@ -45,7 +45,8 @@ export const Cases: React.FC<CasesProps> = ({ onNavigate }) => {
       segment: segmentFilter || undefined,
       limit: 100,
     });
-  }, [stateFilter, failureCodeFilter, segmentFilter, refreshCases, cases.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stateFilter, failureCodeFilter, segmentFilter]);
 
   // Animate queue items on initial entry or when case set genuinely changes
   useEffect(() => {
@@ -164,7 +165,14 @@ export const Cases: React.FC<CasesProps> = ({ onNavigate }) => {
           </select>
 
           <button
-            onClick={() => refreshCases()}
+            onClick={() =>
+              refreshCases({
+                state_filter: stateFilter || undefined,
+                failure_code: failureCodeFilter || undefined,
+                segment: segmentFilter || undefined,
+                limit: 100,
+              })
+            }
             className="p-1.5 rounded-md border border-slate-200 dark:border-[#1F1F1F] bg-white dark:bg-[#0F0F0F] text-slate-600 dark:text-[#A3A3A3] hover:bg-slate-50 dark:hover:bg-[#1A1A1A] transition-colors cursor-pointer"
             title="Refresh cases queue"
           >
@@ -191,60 +199,73 @@ export const Cases: React.FC<CasesProps> = ({ onNavigate }) => {
         </div>
       ) : (
         <div className="divide-y divide-slate-100 dark:divide-[#1F1F1F] border-y border-slate-100 dark:border-[#1F1F1F]">
-          {filteredCases.map((c) => (
-            <div
-              key={c.case_id}
-              onClick={() => onNavigate(`/cases/${c.case_id}`)}
-              className="queue-item-row group py-3.5 px-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/90 dark:hover:bg-[#141414] hover:shadow-2xs transition-all duration-150 cursor-pointer rounded-lg -mx-3.5"
-            >
-              {/* Left & Middle Column */}
-              <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6">
-                <div className="w-28 shrink-0">
-                  <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white tabular-nums">
-                    {formatCurrency(c.amount_due)}
-                  </span>
+          {filteredCases.map((c) => {
+            const isDemoCase = c.case_id.includes('DEMO');
+            return (
+              <div
+                key={c.case_id}
+                onClick={() => onNavigate(`/cases/${c.case_id}`)}
+                className={`queue-item-row group py-3.5 px-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/90 dark:hover:bg-[#141414] hover:shadow-2xs transition-all duration-150 cursor-pointer rounded-lg -mx-3.5 ${
+                  isDemoCase ? 'bg-blue-50/30 dark:bg-blue-950/10 border-l-2 border-blue-500' : ''
+                }`}
+              >
+                {/* Left & Middle Column */}
+                <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6">
+                  <div className="w-28 shrink-0">
+                    <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white tabular-nums">
+                      {formatCurrency(c.amount_due)}
+                    </span>
+                  </div>
+
+                  <div className="w-40 shrink-0">
+                    <span className={`text-xs font-semibold ${getFailureColor(c.failure_code)}`}>
+                      {formatFailureCode(c.failure_code)}
+                    </span>
+                  </div>
+
+                  <div className="text-xs text-slate-500 dark:text-[#A3A3A3] flex flex-wrap items-center gap-2">
+                    {isDemoCase && (
+                      <>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 font-bold">
+                          DEMO
+                        </span>
+                        <span>·</span>
+                      </>
+                    )}
+                    <span className="font-mono text-slate-700 dark:text-[#D4D4D4]">{c.customer_id}</span>
+                    <span>·</span>
+                    <span className="font-mono text-[11px] text-slate-400">{c.case_id}</span>
+                    <span>·</span>
+                    <span>{formatSegment(c.customer_segment)}</span>
+                    <span>·</span>
+                    <span>{c.hours_since_failure.toFixed(0)}h elapsed</span>
+                    <span>·</span>
+                    <span>{c.automated_actions_count}/3 touches</span>
+                    {c.current_state !== 'RECOVERY_ELIGIBLE' && (
+                      <>
+                        <span>·</span>
+                        <span className="text-blue-600 dark:text-blue-400 font-medium">{c.current_state}</span>
+                      </>
+                    )}
+                  </div>
                 </div>
 
-                <div className="w-40 shrink-0">
-                  <span className={`text-xs font-semibold ${getFailureColor(c.failure_code)}`}>
-                    {formatFailureCode(c.failure_code)}
-                  </span>
-                </div>
+                {/* Right Column */}
+                <div className="flex items-center gap-4 self-end sm:self-center">
+                  <div className="text-right">
+                    <span className="text-xs font-bold text-slate-900 dark:text-white">
+                      {c.recommended_action === 'PAYMENT_LINK' ? 'Payment link' : formatFailureCode(c.recommended_action)}
+                    </span>
+                    <span className="text-xs text-slate-400 ml-2 font-mono">
+                      {(c.decision_confidence * 100).toFixed(0)}%
+                    </span>
+                  </div>
 
-                <div className="text-xs text-slate-500 dark:text-[#A3A3A3] flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-slate-700 dark:text-[#D4D4D4]">{c.customer_id}</span>
-                  <span>·</span>
-                  <span className="font-mono text-[11px] text-slate-400">{c.case_id}</span>
-                  <span>·</span>
-                  <span>{formatSegment(c.customer_segment)}</span>
-                  <span>·</span>
-                  <span>{c.hours_since_failure.toFixed(0)}h elapsed</span>
-                  <span>·</span>
-                  <span>{c.automated_actions_count}/3 touches</span>
-                  {c.current_state !== 'RECOVERY_ELIGIBLE' && (
-                    <>
-                      <span>·</span>
-                      <span className="text-blue-600 dark:text-blue-400 font-medium">{c.current_state}</span>
-                    </>
-                  )}
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-all duration-150" />
                 </div>
               </div>
-
-              {/* Right Column */}
-              <div className="flex items-center gap-4 self-end sm:self-center">
-                <div className="text-right">
-                  <span className="text-xs font-bold text-slate-900 dark:text-white">
-                    {c.recommended_action === 'PAYMENT_LINK' ? 'Payment link' : formatFailureCode(c.recommended_action)}
-                  </span>
-                  <span className="text-xs text-slate-400 ml-2 font-mono">
-                    {(c.decision_confidence * 100).toFixed(0)}%
-                  </span>
-                </div>
-
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-all duration-150" />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

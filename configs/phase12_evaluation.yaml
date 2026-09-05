@@ -1,0 +1,13 @@
+dataset_size: 20000
+random_seed: 444555666
+scenario: S1_HIGH_NATURAL_RECOVERY
+bootstrap_iterations: 2000
+bootstrap_seed: 998877
+confidence_level: 0.95
+arms:
+  - CONTROL
+  - BASELINE
+  - RECOVERIQ_V1
+  - RECOVERIQ_V2
+  - RECOVERIQ_V3
+  - RECOVERIQ_V4
