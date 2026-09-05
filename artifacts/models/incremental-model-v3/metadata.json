@@ -1,0 +1,65 @@
+{
+  "model_version": "incremental-model-v3",
+  "feature_schema_version": "features-v1",
+  "dataset_hash": "7170fc6d2f718479b03e50756ca45ed32ea3af7f99717c2721d6ea7b4b766b0c",
+  "config_hash": "daee2d57fda3db78598b1948af526c5bc28182c27eab6c5d66c24ee5d6d39a69",
+  "created_at": "2026-09-05T07:26:07.643446+00:00",
+  "calibration": {
+    "CONTROL": {
+      "action_name": "CONTROL",
+      "sample_count": 386,
+      "positive_count": 200,
+      "brier_score": 0.2222522784754418,
+      "log_loss_value": 0.636414051425197,
+      "roc_auc": 0.6844623655913978,
+      "pr_auc": 0.6782665930587124,
+      "mean_predicted_prob": 0.5063235317075397,
+      "observed_rate": 0.5181347150259067
+    },
+    "REMINDER": {
+      "action_name": "REMINDER",
+      "sample_count": 383,
+      "positive_count": 220,
+      "brier_score": 0.22546536326398411,
+      "log_loss_value": 0.7243664314783579,
+      "roc_auc": 0.6615170105967653,
+      "pr_auc": 0.7053895747943243,
+      "mean_predicted_prob": 0.5523481838619118,
+      "observed_rate": 0.5744125326370757
+    },
+    "PAYMENT_LINK": {
+      "action_name": "PAYMENT_LINK",
+      "sample_count": 416,
+      "positive_count": 228,
+      "brier_score": 0.21510921818366896,
+      "log_loss_value": 0.6245208132088778,
+      "roc_auc": 0.7093131765584173,
+      "pr_auc": 0.7328606223359873,
+      "mean_predicted_prob": 0.5759121027285568,
+      "observed_rate": 0.5480769230769231
+    },
+    "PROMISE_TO_PAY": {
+      "action_name": "PROMISE_TO_PAY",
+      "sample_count": 435,
+      "positive_count": 252,
+      "brier_score": 0.22174217180964262,
+      "log_loss_value": 0.6284035950757466,
+      "roc_auc": 0.6677075201665366,
+      "pr_auc": 0.7495966204748596,
+      "mean_predicted_prob": 0.5963475206231706,
+      "observed_rate": 0.5793103448275863
+    },
+    "ESCALATE": {
+      "action_name": "ESCALATE",
+      "sample_count": 380,
+      "positive_count": 293,
+      "brier_score": 0.15540979978283734,
+      "log_loss_value": 0.4752433706243439,
+      "roc_auc": 0.7330234200305991,
+      "pr_auc": 0.8962928875864323,
+      "mean_predicted_prob": 0.7581288810100473,
+      "observed_rate": 0.7710526315789473
+    }
+  },
+  "feature_count": 28
+}

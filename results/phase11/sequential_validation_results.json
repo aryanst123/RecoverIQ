@@ -1,0 +1,70 @@
+{
+  "CONTROL": {
+    "mean_net": 1409.26,
+    "mean_gross": 1409.26,
+    "mean_cost": 0.0,
+    "recovery_rate": 51.4,
+    "action_counts": {
+      "STOP": 5000
+    }
+  },
+  "BASELINE": {
+    "mean_net": 1007.08,
+    "mean_gross": 1015.25,
+    "mean_cost": 8.17,
+    "recovery_rate": 33.8,
+    "action_counts": {
+      "REMINDER": 1258,
+      "PROMISE_TO_PAY": 1002,
+      "STOP": 550,
+      "PAYMENT_LINK": 914,
+      "ESCALATE": 237
+    }
+  },
+  "RECOVERIQ_V1": {
+    "mean_net": 88.33,
+    "mean_gross": 93.74,
+    "mean_cost": 5.41,
+    "recovery_rate": 2.9,
+    "action_counts": {
+      "STOP": 403,
+      "PROMISE_TO_PAY": 165,
+      "ESCALATE": 242
+    }
+  },
+  "RECOVERIQ_V2": {
+    "mean_net": -0.7,
+    "mean_gross": 0.0,
+    "mean_cost": 0.7,
+    "recovery_rate": 0.0,
+    "action_counts": {
+      "PROMISE_TO_PAY": 266,
+      "STOP": 403,
+      "PAYMENT_LINK": 1
+    }
+  },
+  "RECOVERIQ_CAUSAL_GREEDY": {
+    "mean_net": 79.68,
+    "mean_gross": 87.52,
+    "mean_cost": 7.84,
+    "recovery_rate": 3.4,
+    "action_counts": {
+      "PROMISE_TO_PAY": 185,
+      "ESCALATE": 297,
+      "STOP": 4,
+      "REMINDER": 47,
+      "PAYMENT_LINK": 52
+    }
+  },
+  "RECOVERIQ_CAUSAL_DYNAMIC": {
+    "mean_net": 1.75,
+    "mean_gross": 3.09,
+    "mean_cost": 1.34,
+    "recovery_rate": 0.4,
+    "action_counts": {
+      "PAYMENT_LINK": 161,
+      "STOP": 18,
+      "ESCALATE": 18
+    }
+  }
+}

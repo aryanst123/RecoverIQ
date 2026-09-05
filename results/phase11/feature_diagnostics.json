@@ -1,0 +1,382 @@
+{
+  "CONTROL": {
+    "top_positive_features": [
+      [
+        "seg_VIP",
+        0.2822
+      ],
+      [
+        "fail_GATEWAY_DOWNTIME",
+        0.2736
+      ],
+      [
+        "fail_NETWORK_TIMEOUT",
+        0.1589
+      ],
+      [
+        "fail_AUTHENTICATION_FAILED",
+        0.0685
+      ],
+      [
+        "seg_STANDARD",
+        0.054
+      ]
+    ],
+    "top_negative_features": [
+      [
+        "residual_amount",
+        -0.0957
+      ],
+      [
+        "seg_NEW",
+        -0.0982
+      ],
+      [
+        "fail_CARD_EXPIRED",
+        -0.1493
+      ],
+      [
+        "seg_AT_RISK",
+        -0.2754
+      ],
+      [
+        "fail_INSUFFICIENT_FUNDS",
+        -0.3418
+      ]
+    ],
+    "all_coefficients": {
+      "amount_due": -0.0957,
+      "residual_amount": -0.0957,
+      "hours_since_failure": 0.0,
+      "attempt_count": 0.0,
+      "automated_action_count": 0.0,
+      "last_action_hours_ago": 0.0,
+      "fail_INSUFFICIENT_FUNDS": -0.3418,
+      "fail_AUTHENTICATION_FAILED": 0.0685,
+      "fail_GATEWAY_DOWNTIME": 0.2736,
+      "fail_CARD_EXPIRED": -0.1493,
+      "fail_NETWORK_TIMEOUT": 0.1589,
+      "fail_USER_DROPPED": 0.0101,
+      "seg_STANDARD": 0.054,
+      "seg_VIP": 0.2822,
+      "seg_NEW": -0.0982,
+      "seg_AT_RISK": -0.2754,
+      "chan_SMS": 0.025,
+      "chan_WHATSAPP": -0.0405,
+      "chan_EMAIL": 0.0217,
+      "last_act_NONE": 0.0,
+      "last_act_REMINDER": 0.0,
+      "last_act_PAYMENT_LINK": 0.0,
+      "last_act_PROMISE_TO_PAY": 0.0,
+      "last_act_ESCALATE": 0.0,
+      "p2p_NONE": 0.0,
+      "p2p_PROMISE_PROPOSED": 0.0,
+      "p2p_PROMISE_ACCEPTED": 0.0,
+      "p2p_PROMISE_DUE": 0.0
+    }
+  },
+  "REMINDER": {
+    "top_positive_features": [
+      [
+        "seg_VIP",
+        0.2506
+      ],
+      [
+        "fail_NETWORK_TIMEOUT",
+        0.2453
+      ],
+      [
+        "fail_GATEWAY_DOWNTIME",
+        0.1799
+      ],
+      [
+        "fail_AUTHENTICATION_FAILED",
+        0.1109
+      ],
+      [
+        "chan_SMS",
+        0.073
+      ]
+    ],
+    "top_negative_features": [
+      [
+        "chan_WHATSAPP",
+        -0.0425
+      ],
+      [
+        "seg_NEW",
+        -0.1173
+      ],
+      [
+        "seg_AT_RISK",
+        -0.1478
+      ],
+      [
+        "fail_INSUFFICIENT_FUNDS",
+        -0.2572
+      ],
+      [
+        "fail_CARD_EXPIRED",
+        -0.3102
+      ]
+    ],
+    "all_coefficients": {
+      "amount_due": 0.0151,
+      "residual_amount": 0.0151,
+      "hours_since_failure": 0.0,
+      "attempt_count": 0.0,
+      "automated_action_count": 0.0,
+      "last_action_hours_ago": 0.0,
+      "fail_INSUFFICIENT_FUNDS": -0.2572,
+      "fail_AUTHENTICATION_FAILED": 0.1109,
+      "fail_GATEWAY_DOWNTIME": 0.1799,
+      "fail_CARD_EXPIRED": -0.3102,
+      "fail_NETWORK_TIMEOUT": 0.2453,
+      "fail_USER_DROPPED": -0.0254,
+      "seg_STANDARD": -0.014,
+      "seg_VIP": 0.2506,
+      "seg_NEW": -0.1173,
+      "seg_AT_RISK": -0.1478,
+      "chan_SMS": 0.073,
+      "chan_WHATSAPP": -0.0425,
+      "chan_EMAIL": -0.0414,
+      "last_act_NONE": 0.0,
+      "last_act_REMINDER": 0.0,
+      "last_act_PAYMENT_LINK": 0.0,
+      "last_act_PROMISE_TO_PAY": 0.0,
+      "last_act_ESCALATE": 0.0,
+      "p2p_NONE": 0.0,
+      "p2p_PROMISE_PROPOSED": 0.0,
+      "p2p_PROMISE_ACCEPTED": 0.0,
+      "p2p_PROMISE_DUE": 0.0
+    }
+  },
+  "PAYMENT_LINK": {
+    "top_positive_features": [
+      [
+        "seg_VIP",
+        0.3536
+      ],
+      [
+        "fail_GATEWAY_DOWNTIME",
+        0.337
+      ],
+      [
+        "fail_NETWORK_TIMEOUT",
+        0.1883
+      ],
+      [
+        "fail_CARD_EXPIRED",
+        0.1382
+      ],
+      [
+        "fail_AUTHENTICATION_FAILED",
+        0.1097
+      ]
+    ],
+    "top_negative_features": [
+      [
+        "fail_USER_DROPPED",
+        -0.1104
+      ],
+      [
+        "amount_due",
+        -0.1443
+      ],
+      [
+        "residual_amount",
+        -0.1443
+      ],
+      [
+        "seg_AT_RISK",
+        -0.2308
+      ],
+      [
+        "fail_INSUFFICIENT_FUNDS",
+        -0.5101
+      ]
+    ],
+    "all_coefficients": {
+      "amount_due": -0.1443,
+      "residual_amount": -0.1443,
+      "hours_since_failure": 0.0,
+      "attempt_count": 0.0,
+      "automated_action_count": 0.0,
+      "last_action_hours_ago": 0.0,
+      "fail_INSUFFICIENT_FUNDS": -0.5101,
+      "fail_AUTHENTICATION_FAILED": 0.1097,
+      "fail_GATEWAY_DOWNTIME": 0.337,
+      "fail_CARD_EXPIRED": 0.1382,
+      "fail_NETWORK_TIMEOUT": 0.1883,
+      "fail_USER_DROPPED": -0.1104,
+      "seg_STANDARD": -0.068,
+      "seg_VIP": 0.3536,
+      "seg_NEW": -0.0868,
+      "seg_AT_RISK": -0.2308,
+      "chan_SMS": -0.0165,
+      "chan_WHATSAPP": -0.0072,
+      "chan_EMAIL": 0.037,
+      "last_act_NONE": 0.0,
+      "last_act_REMINDER": 0.0,
+      "last_act_PAYMENT_LINK": 0.0,
+      "last_act_PROMISE_TO_PAY": 0.0,
+      "last_act_ESCALATE": 0.0,
+      "p2p_NONE": 0.0,
+      "p2p_PROMISE_PROPOSED": 0.0,
+      "p2p_PROMISE_ACCEPTED": 0.0,
+      "p2p_PROMISE_DUE": 0.0
+    }
+  },
+  "PROMISE_TO_PAY": {
+    "top_positive_features": [
+      [
+        "fail_INSUFFICIENT_FUNDS",
+        0.1651
+      ],
+      [
+        "fail_NETWORK_TIMEOUT",
+        0.1647
+      ],
+      [
+        "seg_VIP",
+        0.1577
+      ],
+      [
+        "chan_SMS",
+        0.0813
+      ],
+      [
+        "fail_GATEWAY_DOWNTIME",
+        0.0652
+      ]
+    ],
+    "top_negative_features": [
+      [
+        "seg_AT_RISK",
+        -0.058
+      ],
+      [
+        "seg_NEW",
+        -0.0793
+      ],
+      [
+        "chan_WHATSAPP",
+        -0.0816
+      ],
+      [
+        "fail_AUTHENTICATION_FAILED",
+        -0.1416
+      ],
+      [
+        "fail_CARD_EXPIRED",
+        -0.3755
+      ]
+    ],
+    "all_coefficients": {
+      "amount_due": 0.0288,
+      "residual_amount": 0.0288,
+      "hours_since_failure": 0.0,
+      "attempt_count": 0.0,
+      "automated_action_count": 0.0,
+      "last_action_hours_ago": 0.0,
+      "fail_INSUFFICIENT_FUNDS": 0.1651,
+      "fail_AUTHENTICATION_FAILED": -0.1416,
+      "fail_GATEWAY_DOWNTIME": 0.0652,
+      "fail_CARD_EXPIRED": -0.3755,
+      "fail_NETWORK_TIMEOUT": 0.1647,
+      "fail_USER_DROPPED": 0.0109,
+      "seg_STANDARD": -0.0218,
+      "seg_VIP": 0.1577,
+      "seg_NEW": -0.0793,
+      "seg_AT_RISK": -0.058,
+      "chan_SMS": 0.0813,
+      "chan_WHATSAPP": -0.0816,
+      "chan_EMAIL": 0.01,
+      "last_act_NONE": 0.0,
+      "last_act_REMINDER": 0.0,
+      "last_act_PAYMENT_LINK": 0.0,
+      "last_act_PROMISE_TO_PAY": 0.0,
+      "last_act_ESCALATE": 0.0,
+      "p2p_NONE": 0.0,
+      "p2p_PROMISE_PROPOSED": 0.0,
+      "p2p_PROMISE_ACCEPTED": 0.0,
+      "p2p_PROMISE_DUE": 0.0
+    }
+  },
+  "ESCALATE": {
+    "top_positive_features": [
+      [
+        "seg_VIP",
+        0.3171
+      ],
+      [
+        "fail_GATEWAY_DOWNTIME",
+        0.1526
+      ],
+      [
+        "fail_NETWORK_TIMEOUT",
+        0.1489
+      ],
+      [
+        "chan_WHATSAPP",
+        0.0551
+      ],
+      [
+        "fail_AUTHENTICATION_FAILED",
+        0.0401
+      ]
+    ],
+    "top_negative_features": [
+      [
+        "residual_amount",
+        -0.1391
+      ],
+      [
+        "amount_due",
+        -0.1391
+      ],
+      [
+        "fail_INSUFFICIENT_FUNDS",
+        -0.1647
+      ],
+      [
+        "fail_CARD_EXPIRED",
+        -0.1728
+      ],
+      [
+        "seg_AT_RISK",
+        -0.2803
+      ]
+    ],
+    "all_coefficients": {
+      "amount_due": -0.1391,
+      "residual_amount": -0.1391,
+      "hours_since_failure": 0.0,
+      "attempt_count": 0.0,
+      "automated_action_count": 0.0,
+      "last_action_hours_ago": 0.0,
+      "fail_INSUFFICIENT_FUNDS": -0.1647,
+      "fail_AUTHENTICATION_FAILED": 0.0401,
+      "fail_GATEWAY_DOWNTIME": 0.1526,
+      "fail_CARD_EXPIRED": -0.1728,
+      "fail_NETWORK_TIMEOUT": 0.1489,
+      "fail_USER_DROPPED": -0.0574,
+      "seg_STANDARD": -0.0276,
+      "seg_VIP": 0.3171,
+      "seg_NEW": -0.0427,
+      "seg_AT_RISK": -0.2803,
+      "chan_SMS": -0.0381,
+      "chan_WHATSAPP": 0.0551,
+      "chan_EMAIL": -0.0306,
+      "last_act_NONE": 0.0,
+      "last_act_REMINDER": 0.0,
+      "last_act_PAYMENT_LINK": 0.0,
+      "last_act_PROMISE_TO_PAY": 0.0,
+      "last_act_ESCALATE": 0.0,
+      "p2p_NONE": 0.0,
+      "p2p_PROMISE_PROPOSED": 0.0,
+      "p2p_PROMISE_ACCEPTED": 0.0,
+      "p2p_PROMISE_DUE": 0.0
+    }
+  }
+}

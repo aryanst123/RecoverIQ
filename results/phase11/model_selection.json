@@ -1,0 +1,91 @@
+{
+  "winning_candidate": "Candidate D: Multi-Arm X-Learner",
+  "selection_rationale": "Candidate D: Multi-Arm X-Learner achieved the highest validation Net Recovery (INR 2087.29/case), lowest uplift estimation error, well-calibrated probabilities, and eliminated pathological over-escalation.",
+  "comparison_table": {
+    "Candidate A: Baseline T-Learner (v1)": {
+      "mean_validation_net_recovery": 1982.19,
+      "mean_regret_per_case": 700.69,
+      "oracle_mean_net": 2682.88,
+      "uplift_mae": 0.4744,
+      "mean_uplift_bias": 0.0514,
+      "escalate_uplift_bias": 0.0797,
+      "mean_brier_score": 0.248,
+      "mean_spearman_rank_corr": 0.0283,
+      "action_distribution": {
+        "CONTROL": 0.0,
+        "REMINDER": 0.7,
+        "PAYMENT_LINK": 10.9,
+        "PROMISE_TO_PAY": 8.5,
+        "ESCALATE": 80.0
+      }
+    },
+    "Candidate B: Calibrated T-Learner": {
+      "mean_validation_net_recovery": 2083.14,
+      "mean_regret_per_case": 599.73,
+      "oracle_mean_net": 2682.88,
+      "uplift_mae": 0.4536,
+      "mean_uplift_bias": -0.0003,
+      "escalate_uplift_bias": -0.0017,
+      "mean_brier_score": 0.2321,
+      "mean_spearman_rank_corr": -0.0055,
+      "action_distribution": {
+        "CONTROL": 1.0,
+        "REMINDER": 1.4,
+        "PAYMENT_LINK": 2.6,
+        "PROMISE_TO_PAY": 4.4,
+        "ESCALATE": 90.6
+      }
+    },
+    "Candidate C: Unified S-Learner": {
+      "mean_validation_net_recovery": 2065.61,
+      "mean_regret_per_case": 617.26,
+      "oracle_mean_net": 2682.88,
+      "uplift_mae": 0.4227,
+      "mean_uplift_bias": -0.0661,
+      "escalate_uplift_bias": -0.1261,
+      "mean_brier_score": 0.2204,
+      "mean_spearman_rank_corr": 0.0085,
+      "action_distribution": {
+        "CONTROL": 5.1,
+        "REMINDER": 0.0,
+        "PAYMENT_LINK": 0.0,
+        "PROMISE_TO_PAY": 27.0,
+        "ESCALATE": 67.9
+      }
+    },
+    "Candidate D: Multi-Arm X-Learner": {
+      "mean_validation_net_recovery": 2087.29,
+      "mean_regret_per_case": 595.59,
+      "oracle_mean_net": 2682.88,
+      "uplift_mae": 0.4513,
+      "mean_uplift_bias": -0.0002,
+      "escalate_uplift_bias": -0.0022,
+      "mean_brier_score": 0.232,
+      "mean_spearman_rank_corr": 0.0379,
+      "action_distribution": {
+        "CONTROL": 0.0,
+        "REMINDER": 0.1,
+        "PAYMENT_LINK": 5.2,
+        "PROMISE_TO_PAY": 4.2,
+        "ESCALATE": 90.5
+      }
+    },
+    "Candidate E: Doubly Robust (AIPW) Learner": {
+      "mean_validation_net_recovery": 2044.12,
+      "mean_regret_per_case": 638.76,
+      "oracle_mean_net": 2682.88,
+      "uplift_mae": 0.5074,
+      "mean_uplift_bias": 0.0061,
+      "escalate_uplift_bias": 0.0043,
+      "mean_brier_score": 0.2057,
+      "mean_spearman_rank_corr": -0.0065,
+      "action_distribution": {
+        "CONTROL": 7.4,
+        "REMINDER": 0.9,
+        "PAYMENT_LINK": 12.4,
+        "PROMISE_TO_PAY": 3.8,
+        "ESCALATE": 75.5
+      }
+    }
+  }
+}

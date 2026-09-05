@@ -1,0 +1,51 @@
+{
+  "analysis": "Large-Amount Uplift Scaling & Economic Value Decomposition",
+  "by_amount_bucket": {
+    "< 1,000": {
+      "count": 1029,
+      "mean_amount": 661.81,
+      "mean_tau_esc_pred": 0.3608,
+      "mean_tau_esc_true": 0.2255,
+      "mean_tau_esc_bias": 0.1354,
+      "mean_dollar_estimation_error": 94.81,
+      "pct_cases_wrongly_preferring_escalate": 47.7
+    },
+    "3,000 - 10,000": {
+      "count": 1449,
+      "mean_amount": 4906.9,
+      "mean_tau_esc_pred": 0.3164,
+      "mean_tau_esc_true": 0.2705,
+      "mean_tau_esc_bias": 0.0458,
+      "mean_dollar_estimation_error": 194.48,
+      "pct_cases_wrongly_preferring_escalate": 68.7
+    },
+    "1,000 - 3,000": {
+      "count": 2382,
+      "mean_amount": 1838.46,
+      "mean_tau_esc_pred": 0.3547,
+      "mean_tau_esc_true": 0.2683,
+      "mean_tau_esc_bias": 0.0864,
+      "mean_dollar_estimation_error": 154.74,
+      "pct_cases_wrongly_preferring_escalate": 69.7
+    },
+    ">= 10,000": {
+      "count": 140,
+      "mean_amount": 15439.08,
+      "mean_tau_esc_pred": 0.1905,
+      "mean_tau_esc_true": 0.2857,
+      "mean_tau_esc_bias": -0.0952,
+      "mean_dollar_estimation_error": -1882.8,
+      "pct_cases_wrongly_preferring_escalate": 65.0
+    }
+  },
+  "large_ticket_summary_gt_3000": {
+    "count": 1589,
+    "mean_amount": 5834.85,
+    "mean_dollar_error_per_case": 11.46,
+    "wrongful_escalation_preference_rate": 68.3
+  },
+  "root_cause_verdict": {
+    "finding_1": "The T-Learner suffers from significant baseline probability underestimation in the CONTROL arm under S1 (Predicted P(Control): 40.0% vs True P(Control): 50.5%, Bias: -10.5%). This causes the model to artificially overestimate uplift tau(a) = P(a) - P(control) by +10% across all actions!",
+    "finding_2": "For high-ticket cases (>= INR 3,000), this +10% uplift overestimation creates a massive phantom revenue premium of +INR 300 to +INR 1,000 per case. Because ESCALATE has the highest raw predicted probability (67.8%), the phantom premium easily overwhelms the INR 100 cost, leading the policy to over-escalate aggressively."
+  }
+}

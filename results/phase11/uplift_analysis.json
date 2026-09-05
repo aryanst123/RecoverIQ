@@ -1,0 +1,38 @@
+{
+  "REMINDER": {
+    "mean_estimated_uplift": 0.0789,
+    "mean_ground_truth_uplift": 0.0322,
+    "uplift_bias": 0.0467,
+    "uplift_mae": 0.4431,
+    "pearson_correlation": 0.0093,
+    "spearman_rank_correlation": 0.0071,
+    "overestimates_uplift": true
+  },
+  "PAYMENT_LINK": {
+    "mean_estimated_uplift": 0.125,
+    "mean_ground_truth_uplift": 0.092,
+    "uplift_bias": 0.033,
+    "uplift_mae": 0.4709,
+    "pearson_correlation": 0.0444,
+    "spearman_rank_correlation": 0.0343,
+    "overestimates_uplift": true
+  },
+  "PROMISE_TO_PAY": {
+    "mean_estimated_uplift": 0.1154,
+    "mean_ground_truth_uplift": 0.069,
+    "uplift_bias": 0.0464,
+    "uplift_mae": 0.4614,
+    "pearson_correlation": 0.0763,
+    "spearman_rank_correlation": 0.0725,
+    "overestimates_uplift": true
+  },
+  "ESCALATE": {
+    "mean_estimated_uplift": 0.3403,
+    "mean_ground_truth_uplift": 0.2606,
+    "uplift_bias": 0.0797,
+    "uplift_mae": 0.522,
+    "pearson_correlation": -0.0061,
+    "spearman_rank_correlation": -0.0009,
+    "overestimates_uplift": true
+  }
+}

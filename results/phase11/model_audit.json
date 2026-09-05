@@ -1,0 +1,60 @@
+{
+  "model_version": "incremental-model-v1",
+  "feature_schema_version": "features-v1",
+  "architecture": "T-Learner (Independent per-action classifiers with Platt scaling)",
+  "base_estimator": "LogisticRegression(C=1.0, max_iter=1000, class_weight='balanced')",
+  "calibration_wrapper": "CalibratedClassifierCV(method='sigmoid', cv=3)",
+  "training_scenario": "S5_HIGH_RECOVERY_HETEROGENEITY",
+  "target_evaluation_scenario": "S1_HIGH_NATURAL_RECOVERY",
+  "training_dataset_size": 6000,
+  "feature_count": 28,
+  "feature_names": [
+    "amount_due",
+    "residual_amount",
+    "hours_since_failure",
+    "attempt_count",
+    "automated_action_count",
+    "last_action_hours_ago",
+    "fail_INSUFFICIENT_FUNDS",
+    "fail_AUTHENTICATION_FAILED",
+    "fail_GATEWAY_DOWNTIME",
+    "fail_CARD_EXPIRED",
+    "fail_NETWORK_TIMEOUT",
+    "fail_USER_DROPPED",
+    "seg_STANDARD",
+    "seg_VIP",
+    "seg_NEW",
+    "seg_AT_RISK",
+    "chan_SMS",
+    "chan_WHATSAPP",
+    "chan_EMAIL",
+    "last_act_NONE",
+    "last_act_REMINDER",
+    "last_act_PAYMENT_LINK",
+    "last_act_PROMISE_TO_PAY",
+    "last_act_ESCALATE",
+    "p2p_NONE",
+    "p2p_PROMISE_PROPOSED",
+    "p2p_PROMISE_ACCEPTED",
+    "p2p_PROMISE_DUE"
+  ],
+  "actions_modeled": [
+    "CONTROL",
+    "REMINDER",
+    "PAYMENT_LINK",
+    "PROMISE_TO_PAY",
+    "ESCALATE"
+  ],
+  "leakage_barrier_audit": {
+    "forbidden_keywords_checked": [
+      "latent",
+      "potential",
+      "counterfactual",
+      "y_control",
+      "y_escalate",
+      "recovered_amount"
+    ],
+    "leakage_detected": false
+  },
+  "critical_audit_finding": "Model incremental-model-v1 was trained on S5_HIGH_RECOVERY_HETEROGENEITY, but evaluated on S1_HIGH_NATURAL_RECOVERY (natural_recovery_boost = +0.30, uplift_multiplier = 0.8). Furthermore, class_weight='balanced' distorts the baseline intercept in unbalanced arms."
+}
